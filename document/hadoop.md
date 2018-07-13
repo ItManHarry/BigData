@@ -2,9 +2,6 @@
 
 ## Hadoop版本衍化历史
 
-Apache Hadoop 版本分为分为1.0 和2.0 两代版本，
-我们将第一代Hadoop 称为Hadoop1.0，第二代Hadoop 称为Hadoop 2.0。
-
  ![Hadoop版本](https://github.com/ItManHarry/BigData/blob/master/document/1.jpg)
 
 第一代Hadoop 包含三个大版本，分别是0.20.x，0.21.x 和0.22.x，其中，0.20.x 最后演化成1.0.x，
