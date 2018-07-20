@@ -34,3 +34,29 @@
 - 使用JAR包安装部署
 
 	- 各个版本均提供
+
+# Hadoop2.X安装步骤
+
+- 软件环境
+
+	- centos6.5/redhat6.5,jdk1.7, zookeeper3.4.5,hadoop2.4.1
+	
+- 硬件环境
+
+	- 2T硬盘,64G内存,12核CPU,千兆网卡
+	
+- 集群搭建步骤
+
+	- Hostname修改
+	
+		1:修改/etc/hosts(每个服务器的文件内容一致)
+		
+		2:修改/etc/sysconfig/network，修改HOSTNAME为hosts中ip对应的名称
+	
+	- SSH互信
+	
+	- JDK安装
+	
+	- Zookeeper安装
+	
+	- Hadoop安装
