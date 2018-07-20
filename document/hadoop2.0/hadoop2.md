@@ -52,11 +52,84 @@
 		1:修改/etc/hosts(每个服务器的文件内容一致)
 		
 		2:修改/etc/sysconfig/network，修改HOSTNAME为hosts中ip对应的名称
+		
+			10.40.123.200 master			
+			10.40.123.200 slave1
+			10.40.123.200 slave2
 	
 	- SSH互信
+		
+		- 生成公私钥，在master 机器的虚拟机命令行下输入ssh-keygen，一路回车，全部默认
+		
+		- 复制一份master 的公钥文件，cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+		
+		- 在所有的slave机器上，也在命令行中输入ssh-keygen，一路回车，全部默认
+		
+		- 在所有的salve机器上，从master 机器上复制master 的公钥文件：scp master:~/.ssh/authorized_keys /home/hadoop/.ssh/
 	
 	- JDK安装
 	
+		- 上传jdk7u79linuxx64.tar.gz到各个服务器
+		 
+		- 执行：tar -zvxf jdk7u79linuxx64.tar.gz命令进行解压
+		
+		- 执行：mv jdk7u79linuxx64/ jdk7 进行文件重命名
+		
+		- 配置环境变量：
+		
+			vi /etc/profile
+			
+			添加：
+				export JAVA_HOME=/home/hadoop/Java/jdk7
+				export PATH=.:$PATH:$JAVA_HOME/bin
+				
+		- 执行：source /etc/profile或者重启服务器生效
+		
+	
 	- Zookeeper安装
+	
+		- 将下载的zookeeper-3.4.5.tar.gz上传至各个服务器
+		
+		- 执行：tar -zvxf zookeeper-3.4.5.tar.gz命令进行解压
+		
+		- 执行：mv zookeeper-3.4.5/ zookeeper 进行文件重命名
+		
+		- 进入zookeeper目录，创建data和logs文件
+		
+			mkdir data
+			mkdir logs
+		- 进入zookeeper/conf目录，新增配置文件zoo.cfg(zookeeper启动读取)
+		
+			文件内容如下：
+			clientPort=2181
+			tickTime=2000
+			initLimit=10
+			syncLimit=5
+			dataDir=/home/hadoop/zookeeper/data
+			dataLogDir=/home/hadoop/zookeeper/logs
+			server.1=master:2888:3888
+			server.2=slave1:2888:3888
+			server.3=slave2:2888:3888
+		- 根据hosts配置的信息记zoo.cfg配置文件信息，在data文件夹下新增myid，内容就是1/2/3
+		
+			cd data
+			vi myid
+			
+		- zookeeper启动、重启、停止、状态查看命令
+		
+			cd bin
+			
+			./zkServer.sh start
+			./zkServer.sh restart
+			./zkServer.sh stop
+			./zkServer.sh status
+		
+		注：启动查看状态出现如下错误：
+		
+			zookeeper Error contacting service. It is probably not running
+			
+		- 排查各个配置文件
+		
+		- 查看对应的端口是否开启（我启动失败原因就是2888/3888端口没有开启）
 	
 	- Hadoop安装
