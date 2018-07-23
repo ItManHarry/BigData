@@ -200,7 +200,7 @@
 				```
 			- 修改配置文件hdfs-site.xml
 			
-				```
+				```xml
 					<configuration>
 						<!--指定hdfs的nameservice为cluster，需要和core-site.xml中的保持一致 -->
 						<property>
@@ -210,26 +210,26 @@
 						<!-- cluster下面有两个NameNode，分别是cluster1，cluster2 -->
 						<property>
 							<name>dfs.ha.namenodes.cluster</name>
-							<value>cluster1,cluster2</value>
+							<value>slave1,slave2</value>
 						</property>
 						<!-- cluster1的RPC通信地址 -->
 						<property>
-							<name>dfs.namenode.rpc-address.cluster.cluster1</name>
+							<name>dfs.namenode.rpc-address.cluster.slave1</name>
 							<value>slave1:9000</value>
 						</property>
 						<!-- cluster1的http通信地址 -->
 						<property>
-							<name>dfs.namenode.http-address.cluster.cluster1</name>
+							<name>dfs.namenode.http-address.cluster.slave1</name>
 							<value>slave1:50070</value>
 						</property>
 						<!-- cluster2的RPC通信地址 -->
 						<property>
-							<name>dfs.namenode.rpc-address.cluster.cluster2</name>
+							<name>dfs.namenode.rpc-address.cluster.slave2</name>
 							<value>slave2:9000</value>
 						</property>
 						<!-- cluster2的http通信地址 -->
 						<property>
-							<name>dfs.namenode.http-address.cluster.cluster2</name>
+							<name>dfs.namenode.http-address.cluster.slave2</name>
 							<value>slave2:50070</value>
 						</property>
 						<!-- 指定NameNode的元数据在JournalNode上的存放位置 -->
@@ -275,7 +275,7 @@
 			
 			- 修改配置文件mapred-site.xml
 				
-				```
+				```xml
 					<configuration>
 						<!-- 指定mr框架为yarn方式 -->
 						<property>
@@ -294,7 +294,7 @@
 			
 			- 修改配置文件yarn-site.xml
 			
-			```
+			```xml
 				<configuration>
 					<!-- 开启RM高可靠 -->
 					<property>
@@ -348,4 +348,40 @@
 				cd hadoop/bin
 				./hadoop namenode -format
 				
+				执行完成，在hadoop/tmp中生成了dfs文件，将此文件copy至slave服务器对应的目录中即可。			
+			注：在第一次执行此命令是报错，原因是slave服务器的端口8485没有开启，通过编辑iptables，将
+			相应的端口开启，问题解决。
+				
+			- 在主服务器格式化ZKFC
 			
+				./hdfs zkfc -format
+			
+			执行报错：Error:Could not find or load main class zkfc
+			报错原因在于：错误在配置hdfs-site.xml文件时出错：
+			```xml
+				<property>
+					<name>dfs.namenode.http-address.cluster.slave1</name>
+					<value>slave1:50070</value>
+				</property>
+			```
+			name属性值最后的值要和value中的主机名一致。
+			修改配置后，执行命令，ZKFC正常格式化
+			
+			- 每台服务器设置环境变量
+			
+			vi /etc/profile
+			
+			export HADOOP_HOME=/home/hadoop/hadoop
+			export HADOOP_PREFIX=/home/hadoop/hadoop
+			export YARN_CONF_DIR=/home/hadoop/hadoop
+			export HADOOP_COMMON_HOME=/home/hadoop/hadoop
+			export HADOOP_CMD=/home/hadoop/hadoop/bin/hadoop
+			
+			修改完成后，执行source或者重启生效：
+			
+			source /etc/profile
+			
+			- 启动hadoop：
+				
+				cd hadoop/sbin
+				./start-all.sh
