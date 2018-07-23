@@ -133,3 +133,70 @@
 		- 查看对应的端口是否开启（我启动失败原因就是2888/3888端口没有开启）
 	
 	- Hadoop安装
+	
+		- 解压hadoop-2.4.1.tar.gz
+		
+			tar -zvxf hadoop-2.4.1.tar.gz
+			
+		- 重命名hadoop-2.4.1
+		
+			mv hadoop-2.4.1/ hadoop
+		
+		- 创建临时目录及日志目录
+		
+			mkdir tmp
+			mkdir logs
+		
+		- 进入etc/hadoop文件夹，修改以下配置文件：
+		
+			- 修改配置文件core-site.xml
+			
+				增加如下属性的配置：
+				
+				```xml
+					<configuration>
+						<property>
+							<name>fs.defaultFS</name>
+							<value>hdfs://cluster</value>
+						</property>
+						<property>
+							<name>hadoop.tmp.dir</name>
+							<value>/home/hadoop/hadoop/tmp</value>
+						</property>
+						<property>
+							<name>ha.zookeeper.quorum</name>
+							<value>master:2181,slave1:2181,slave2:2181</value>
+						</property>
+						<property>
+							<name>hadoop.proxyuser.hue.hosts</name>
+							<value>*</value>
+						</property>
+						<property>
+							<name>hadoop.proxyuser.hue.groups</name>
+							<value>*</value>
+						</property>
+						<property>
+							<name>io.compression.codecs</name>
+							<value>org.apache.hadoop.io.compress.GzipCodec,
+								   org.apache.hadoop.io.compress.DefaultCodec,
+								   org.apache.hadoop.io.compression.lzo.LzoCodec,
+								   org.apache.hadoop.io.compress.BZip2Codec
+							</value>
+						</property>
+					</configuration>
+				```
+		
+			- 修改配置文件mapred-site.xml
+		
+			- 修改配置文件slaves
+			
+				修改内容为DataNode节点服务器:
+				
+				slave1
+				slave2
+			
+			- 修改配置文件yarn-site.xml
+			
+			- 修改配置文件hdfs-site.xml
+			
+			
