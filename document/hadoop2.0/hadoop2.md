@@ -176,7 +176,9 @@
 							<value>*</value>
 						</property>
 						<property>
-							<name>io.compression.codecs</name>							<value>org.apache.hadoop.io.compress.GzipCodec,org.apache.hadoop.io.compress.DefaultCodec,org.apache.hadoop.io.compression.lzo.LzoCodec,org.apache.hadoop.io.compress.BZip2Codec</value>
+							<name>io.compression.codecs</name>							
+							
+							<value>							org.apache.hadoop.io.compress.GzipCodec,org.apache.hadoop.io.compress.DefaultCodec,org.apache.hadoop.io.compression.lzo.LzoCodec,org.apache.hadoop.io.compress.BZip2Codec</value>
 						</property>
 						<property>
 							<name>io.compression.codec.lzo.class</name>
