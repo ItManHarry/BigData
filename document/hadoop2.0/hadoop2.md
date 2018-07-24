@@ -51,7 +51,8 @@
 	
 		1:修改/etc/hosts(每个服务器的文件内容一致)
 		
-		2:修改/etc/sysconfig/network，修改HOSTNAME为hosts中ip对应的名称
+		2:修改/etc/sysconfig/network，修改HOSTNAME为hosts中ip对应的名称（凡是localhost.xxx一律
+		替换为指定host name，如master/slave1/slave2）
 		
 			10.40.123.200 master			
 			10.40.123.201 slave1
@@ -345,15 +346,15 @@
 					</property>					<!-- 指定RM的名字 -->
 					<property>
 						<name>yarn.resourcemanager.ha.rm-ids</name>
-						<value>rm1,rm2</value>
+						<value>slave1,slave2</value>
 					</property>
 					<!-- 分别指定RM的地址 -->
 					<property>
-						<name>yarn.resourcemanager.hostname.rm1</name>
+						<name>yarn.resourcemanager.hostname.slave1</name>
 						<value>slave1</value>
 					</property>
 					<property>
-						<name>yarn.resourcemanager.hostname.rm2</name>
+						<name>yarn.resourcemanager.hostname.slave2</name>
 						<value>slave2</value>
 					</property>
 					<!-- 指定zk集群地址 -->
@@ -374,7 +375,7 @@
 				
 				./zkServer.sh start
 				
-			- 启动journalnode进程
+			- 启动journalnode进程（此步骤经实际操作验证，无需单独启动，后面启动dfs时会自动启动起来）
 			
 				cd hadoop/sbin
 				
@@ -383,6 +384,7 @@
 			- 在主服务器格式化HDFS
 			
 				cd hadoop/bin
+				
 				./hadoop namenode -format
 				
 				执行完成，在hadoop/tmp中生成了dfs文件，将此文件copy至slave服务器对应的目录中即可。			
@@ -402,7 +404,7 @@
 				</property>
 			```
 			name属性值最后的值要和value中的主机名一致。
-			修改配置后，执行命令，ZKFC正常格式化
+			修改配置后，执行命令，ZKFC正常格式化。注：其他配置也要注意这一点。
 			
 			- 每台服务器设置环境变量
 			
@@ -427,7 +429,28 @@
 				cd hadoop/sbin
 				
 				./start-dfs.sh
+				
+			启动报错：Could not resolve hostname node1: Name or service not known
+			
+			问题原因：
+			
+				1、/etc/hosts配置问题。
+				
+				2、/etc/profile配置问题。
+				
+			解决：
+				1、/etc/hosts 中的localhost.localdomain 替换为对应的hostname即可。
+				
+				2、修改etc/profile配置文件，添加：
+				
+					export HADOOP_COMMON_LIB_NATIVE_DIR=${HADOOP_PREFIX}/lib/native
+					
+					export HADOOP_OPTS="-Djava.library.path=$HADOOP_PREFIX/lib" 
+					
+			hadoop报错:RECEIVED SIGNAL 15: SIGTERM
+			
+			此问题尚未解决，主服务器没有启动成功，待处理。。。。。。
 			
 			- 每台服务器启动YARN:
 			
-				./start-yar.sh
+				./start-yarn.sh
