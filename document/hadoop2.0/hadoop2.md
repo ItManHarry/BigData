@@ -54,10 +54,26 @@
 		2:修改/etc/sysconfig/network，修改HOSTNAME为hosts中ip对应的名称
 		
 			10.40.123.200 master			
-			10.40.123.200 slave1
-			10.40.123.200 slave2
+			10.40.123.201 slave1
+			10.40.123.202 slave2
 	
 	- SSH互信
+	
+		- 首先确认ssh的安装情况（root账号）
+		
+			service sshd status
+			
+		- 若没有安装，执行以下命令进行安装：
+		
+			yum install sshd
+			
+		- ssh配置文件
+		
+			vi /etc/ssh/sshd_config
+			
+		- 重启ssh
+		
+			service sshd restart
 		
 		- 生成公私钥，在master 机器的虚拟机命令行下输入ssh-keygen，一路回车，全部默认
 		
@@ -406,7 +422,12 @@
 			
 			source /etc/profile
 			
-			- 启动hadoop：
+			- 启动HDFS(在master上执行)：
 				
 				cd hadoop/sbin
-				./start-all.sh
+				
+				./start-dfs.sh
+			
+			- 每台服务器启动YARN:
+			
+				./start-yar.sh
