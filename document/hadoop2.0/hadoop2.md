@@ -80,7 +80,9 @@
 			vi /etc/profile
 			
 			添加：
+			
 				export JAVA_HOME=/home/hadoop/Java/jdk7
+				
 				export PATH=.:$PATH:$JAVA_HOME/bin
 				
 		- 执行：source /etc/profile或者重启服务器生效
@@ -97,22 +99,35 @@
 		- 进入zookeeper目录，创建data和logs文件
 		
 			mkdir data
+			
 			mkdir logs
+			
 		- 进入zookeeper/conf目录，新增配置文件zoo.cfg(zookeeper启动读取)
 		
 			文件内容如下：
+			
 			clientPort=2181
+			
 			tickTime=2000
+			
 			initLimit=10
+			
 			syncLimit=5
+			
 			dataDir=/home/hadoop/zookeeper/data
+			
 			dataLogDir=/home/hadoop/zookeeper/logs
+			
 			server.1=master:2888:3888
+			
 			server.2=slave1:2888:3888
+			
 			server.3=slave2:2888:3888
+			
 		- 根据hosts配置的信息记zoo.cfg配置文件信息，在data文件夹下新增myid，内容就是1/2/3
 		
 			cd data
+			
 			vi myid
 			
 		- zookeeper启动、重启、停止、状态查看命令
@@ -120,8 +135,11 @@
 			cd bin
 			
 			./zkServer.sh start
+			
 			./zkServer.sh restart
+			
 			./zkServer.sh stop
+			
 			./zkServer.sh status
 		
 		注：启动查看状态出现如下错误：
@@ -145,7 +163,9 @@
 		- 创建临时目录/日志目录/JournalNode在本地磁盘存放数据的位置
 		
 			mkdir tmp
+			
 			mkdir logs
+			
 			mkdir journal
 		
 		- 进入etc/hadoop文件夹，修改以下配置文件：
@@ -290,6 +310,7 @@
 				修改内容为DataNode节点服务器:
 				
 				slave1
+				
 				slave2
 			
 			- 修改配置文件yarn-site.xml
@@ -372,9 +393,13 @@
 			vi /etc/profile
 			
 			export HADOOP_HOME=/home/hadoop/hadoop
+			
 			export HADOOP_PREFIX=/home/hadoop/hadoop
+			
 			export YARN_CONF_DIR=/home/hadoop/hadoop
+			
 			export HADOOP_COMMON_HOME=/home/hadoop/hadoop
+			
 			export HADOOP_CMD=/home/hadoop/hadoop/bin/hadoop
 			
 			修改完成后，执行source或者重启生效：
