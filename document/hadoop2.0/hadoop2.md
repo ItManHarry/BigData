@@ -92,15 +92,17 @@
 		
 			vi /etc/ssh/sshd_config
 			
-			找到以下内容，并去掉注释符"#"
-			
-	　　		RSAAuthentication yes
-	
-			　　PubkeyAuthentication yes
-			
-			　　AuthorizedKeysFile      .ssh/authorized_keys
-			
-			保存退出后，重启ssh
+			```
+				找到以下内容，并去掉注释符"#"
+				
+		　　	RSAAuthentication yes
+		
+				PubkeyAuthentication yes
+				
+				AuthorizedKeysFile      .ssh/authorized_keys
+				
+				保存退出后，重启ssh
+			```
 			
 			service sshd restart
 		
