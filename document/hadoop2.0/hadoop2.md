@@ -92,12 +92,12 @@
 		
 			vi /etc/ssh/sshd_config
 			
-			```
-				找到以下内容，并去掉井号注释符				
-		　　	RSAAuthentication yes		
-				PubkeyAuthentication yes				
-				AuthorizedKeysFile      .ssh/authorized_keys			
-			```
+			找到以下内容，并去掉井号注释符	
+			
+	　　	RSAAuthentication yes		
+			PubkeyAuthentication yes				
+			AuthorizedKeysFile      .ssh/authorized_keys			
+			
 			保存退出后，重启ssh：
 			
 			service sshd restart
@@ -109,6 +109,7 @@
 		- 修改文件权限：
 				
 			chmod 700 ~/.ssh
+			
 			chmod 600 ~/.ssh/authorized_keys	
 			
 		- 本机测试：
@@ -132,14 +133,14 @@
 		- 修改文件权限：
 		
 			chmod 700 ~/.ssh
+			
 			chmod 600 ~/.ssh/authorized_keys
 
-		- 测试 ：
-				在master上执行:
+		- 测试 ，在master上执行:
 				
-					ssh 目标主机名
+			ssh 目标主机名
 					
-				若能免密登录，则配置成功。
+			若能免密登录，则配置成功。
 		
 	- JDK安装
 	
