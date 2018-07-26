@@ -49,14 +49,18 @@
 
 	- Hostname修改
 	
-		1:修改/etc/hosts(每个服务器的文件内容一致)
+		1:修改/etc/hosts(每个服务器的文件内容一致,凡是localhost.xxx一律
+		替换为指定host name，如master/slave1/slave2)
 		
-		2:修改/etc/sysconfig/network，修改HOSTNAME为hosts中ip对应的名称（凡是localhost.xxx一律
-		替换为指定host name，如master/slave1/slave2）
+		2:修改/etc/sysconfig/network，修改HOSTNAME为hosts中ip对应的名称
 		
 			10.40.123.200 master			
 			10.40.123.201 slave1
 			10.40.123.202 slave2
+			
+	- 关闭防火墙
+	
+		执行命令：service chkconfig off
 	
 	- SSH互信
 	
@@ -76,14 +80,69 @@
 		
 			service sshd restart
 		
-		- 生成公私钥，在master 机器的虚拟机命令行下输入ssh-keygen，一路回车，全部默认
+	- ssh免密码登录（参考：https://www.linuxidc.com/Linux/2016-10/136200.htm）
 		
-		- 复制一份master 的公钥文件，cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+		- 关闭防火墙，使用root账号：
 		
-		- 在所有的slave机器上，也在命令行中输入ssh-keygen，一路回车，全部默认
+			vi /etc/selinux/config
+			
+			找到SELINUX并修改为：SELINUX=disable，保存退出。
 		
-		- 在所有的salve机器上，从master 机器上复制master 的公钥文件：scp master:~/.ssh/authorized_keys /home/hadoop/.ssh/
+		- 修改sshd的配置文件（root权限）
+		
+			vi /etc/ssh/sshd_config
+			
+			找到以下内容，并去掉注释符"#"
+			
+	　　		RSAAuthentication yes
 	
+			　　PubkeyAuthentication yes
+			
+			　　AuthorizedKeysFile      .ssh/authorized_keys
+			
+			保存退出后，重启ssh
+			
+			service sshd restart
+		
+		- 生成公私钥，退出root账号，在master 机器的虚拟机命令行下输入ssh-keygen -t rsa，一路回车，全部默认。
+		
+		- 导入到本机：cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+		
+		- 修改文件权限：
+				
+			# chmod 700 ~/.ssh
+			# chmod 600 ~/.ssh/authorized_keys	
+			
+		- 本机测试：
+		
+			ssh locahost
+			
+			如果能够登录，即验证成功，继续以下操作。
+		
+		- 在所有的slave机器上，也在命令行中输入ssh-keygen -t rsa，一路回车，全部默认。
+		
+		- 在master机器上复制master的授权文件到各个slave机器：
+		
+			scp ~/.ssh/id_rsa.pub root@目标主机ip或主机名:/home/id_rsa.pub
+			
+			注意把文件传送到目标主机时，要用root用户，否则会因权限不够而拒绝。输入目标主机密码后，出现OK即传输成功。
+			
+		-  登录到各目标主机，把公钥导入到认证文件（非root账号）
+		
+			cat /home/id_rsa.pub >> ~/.ssh/authorized_keys
+		
+		- 修改文件权限：
+		
+			# chmod 700 ~/.ssh
+			# chmod 600 ~/.ssh/authorized_keys
+
+		- 测试 ：
+				在master上执行:
+				
+					ssh 目标主机名
+					
+				若能免密登录，则配置成功。
+		
 	- JDK安装
 	
 		- 上传jdk7u79linuxx64.tar.gz到各个服务器
@@ -449,7 +508,7 @@
 					
 			hadoop报错:RECEIVED SIGNAL 15: SIGTERM
 			
-			此问题尚未解决，主服务器没有启动成功，待处理。。。。。。
+			此问题原因是ssh免密登录没有解决，通过处理ssh免密登录，问题解决。
 			
 			- 每台服务器启动YARN:
 			
