@@ -92,13 +92,13 @@
 		
 			vi /etc/ssh/sshd_config
 			
-			找到以下内容，并去掉井号注释符	
+			找到以下内容，并去掉井号注释符：
 			
-	　　	RSAAuthentication yes	
-	
-			PubkeyAuthentication yes
-			
-			AuthorizedKeysFile      .ssh/authorized_keys		
+			| 配置项|
+			| --- |
+			| RSAAuthentication yes |
+			| PubkeyAuthentication yes |
+			| AuthorizedKeysFile      .ssh/authorized_keys |					
 			
 			保存退出后，重启ssh：
 			
