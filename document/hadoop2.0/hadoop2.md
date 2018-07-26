@@ -93,16 +93,12 @@
 			vi /etc/ssh/sshd_config
 			
 			```
-				找到以下内容，并去掉注释符"#"
-				
-		　　	RSAAuthentication yes
-		
-				PubkeyAuthentication yes
-				
-				AuthorizedKeysFile      .ssh/authorized_keys
-				
-				保存退出后，重启ssh
+				找到以下内容，并去掉井号注释符				
+		　　	RSAAuthentication yes		
+				PubkeyAuthentication yes				
+				AuthorizedKeysFile      .ssh/authorized_keys			
 			```
+			保存退出后，重启ssh：
 			
 			service sshd restart
 		
@@ -112,8 +108,8 @@
 		
 		- 修改文件权限：
 				
-			# chmod 700 ~/.ssh
-			# chmod 600 ~/.ssh/authorized_keys	
+			chmod 700 ~/.ssh
+			chmod 600 ~/.ssh/authorized_keys	
 			
 		- 本机测试：
 		
@@ -135,8 +131,8 @@
 		
 		- 修改文件权限：
 		
-			# chmod 700 ~/.ssh
-			# chmod 600 ~/.ssh/authorized_keys
+			chmod 700 ~/.ssh
+			chmod 600 ~/.ssh/authorized_keys
 
 		- 测试 ：
 				在master上执行:
