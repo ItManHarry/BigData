@@ -247,7 +247,7 @@
 		
 		- 进入etc/hadoop文件夹，修改以下配置文件：
 		
-			- 修改hadoo-env.sh
+			- 修改hadoop-env.sh
 			
 				export JAVA_HOME=/usr/java/jdk1.7.0_55
 		
@@ -435,7 +435,7 @@
 				
 				./zkServer.sh start
 				
-			- 启动journalnode进程（此步骤经实际操作验证，无需单独启动，后面启动dfs时会自动启动起来）
+			- 启动journalnode进程（格式化namenode必须启动）
 			
 				cd hadoop/sbin
 				
