@@ -249,15 +249,15 @@
 			
 			vi /etc/profile
 			
-			export HADOOP_HOME=/home/hadoop/hadoop
+			export HADOOP_PREFIX=/home/hadoop/hadoop-2.4.1
 			
-			export HADOOP_PREFIX=/home/hadoop/hadoop
+			export HADOOP_HOME=$HADOOP_PREFIX
 			
-			export YARN_CONF_DIR=/home/hadoop/hadoop
+			export YARN_CONF_DIR=$HADOOP_PREFIX
 			
-			export HADOOP_COMMON_HOME=/home/hadoop/hadoop
+			export HADOOP_COMMON_HOME=$HADOOP_PREFIX
 			
-			export HADOOP_CMD=/home/hadoop/hadoop/bin/hadoop
+			export HADOOP_CMD=$HADOOP_PREFIX/bin/hadoop
 			
 			修改完成后，执行source或者重启生效：
 			
