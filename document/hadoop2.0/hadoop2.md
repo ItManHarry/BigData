@@ -244,6 +244,24 @@
 			mkdir logs
 			
 			mkdir journal
+			
+		- 每台服务器设置环境变量
+			
+			vi /etc/profile
+			
+			export HADOOP_HOME=/home/hadoop/hadoop
+			
+			export HADOOP_PREFIX=/home/hadoop/hadoop
+			
+			export YARN_CONF_DIR=/home/hadoop/hadoop
+			
+			export HADOOP_COMMON_HOME=/home/hadoop/hadoop
+			
+			export HADOOP_CMD=/home/hadoop/hadoop/bin/hadoop
+			
+			修改完成后，执行source或者重启生效：
+			
+			source /etc/profile
 		
 		- 进入etc/hadoop文件夹，修改以下配置文件：
 		
@@ -465,24 +483,6 @@
 			```
 			name属性值最后的值要和value中的主机名一致。
 			修改配置后，执行命令，ZKFC正常格式化。注：其他配置也要注意这一点。
-			
-			- 每台服务器设置环境变量
-			
-			vi /etc/profile
-			
-			export HADOOP_HOME=/home/hadoop/hadoop
-			
-			export HADOOP_PREFIX=/home/hadoop/hadoop
-			
-			export YARN_CONF_DIR=/home/hadoop/hadoop
-			
-			export HADOOP_COMMON_HOME=/home/hadoop/hadoop
-			
-			export HADOOP_CMD=/home/hadoop/hadoop/bin/hadoop
-			
-			修改完成后，执行source或者重启生效：
-			
-			source /etc/profile
 			
 			- 启动HDFS(在master上执行)：
 				
