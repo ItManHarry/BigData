@@ -52,6 +52,11 @@
 		1:修改/etc/hosts(每个服务器的文件内容一致,凡是localhost.xxx一律
 		替换为指定host name，如master/slave1/slave2)
 		
+			127.0.0.1 master localhost
+			10.40.123.200 master			
+			10.40.123.201 slave1
+			10.40.123.202 slave2
+		
 		2:修改/etc/sysconfig/network，修改HOSTNAME为hosts中ip对应的名称
 		
 			10.40.123.200 master			
@@ -518,3 +523,11 @@
 			- 每台服务器启动YARN:
 			
 				./start-yarn.sh
+				
+			问题：
+			
+				启动后，两个namenode都是standby状态！
+				
+			解决：
+			
+				详细参照：https://www.cnblogs.com/zlslch/p/9190126.html
