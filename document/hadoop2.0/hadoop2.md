@@ -424,15 +424,15 @@
 					</property>					<!-- 指定RM的名字 -->
 					<property>
 						<name>yarn.resourcemanager.ha.rm-ids</name>
-						<value>slave1,slave2</value>
+						<value>rm1,rm2</value>
 					</property>
 					<!-- 分别指定RM的地址 -->
 					<property>
-						<name>yarn.resourcemanager.hostname.slave1</name>
+						<name>yarn.resourcemanager.hostname.rm1</name>
 						<value>slave1</value>
 					</property>
 					<property>
-						<name>yarn.resourcemanager.hostname.slave2</name>
+						<name>yarn.resourcemanager.hostname.rm2</name>
 						<value>slave2</value>
 					</property>
 					<!-- 指定zk集群地址 -->
