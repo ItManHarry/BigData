@@ -259,6 +259,10 @@
 			
 			export HADOOP_CMD=$HADOOP_PREFIX/bin/hadoop
 			
+			export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_PREFIX/lib/native
+					
+			export HADOOP_OPTS="-Djava.library.path=$HADOOP_PREFIX/lib" 
+					
 			修改完成后，执行source或者重启生效：
 			
 			source /etc/profile
@@ -503,7 +507,7 @@
 				
 				2、修改etc/profile配置文件，添加：
 				
-					export HADOOP_COMMON_LIB_NATIVE_DIR=${HADOOP_PREFIX}/lib/native
+					export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_PREFIX/lib/native
 					
 					export HADOOP_OPTS="-Djava.library.path=$HADOOP_PREFIX/lib" 
 					
