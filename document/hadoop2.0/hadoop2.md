@@ -425,11 +425,15 @@
 					<property>
 						<name>yarn.resourcemanager.ha.enabled</name>
 						<value>true</value>
-					</property>
+					</property
+					<property>
+						<name>yarn.resourcemanager.webapp.address</name>
+						<value>master:8088</value>
+					</property
 					<!-- 指定RM的cluster id -->
 					<property>
 						<name>yarn.resourcemanager.cluster-id</name>
-						<value>yrc</value>
+						<value>RM_HA_ID</value>
 					</property>					<!-- 指定RM的名字 -->
 					<property>
 						<name>yarn.resourcemanager.ha.rm-ids</name>
@@ -443,6 +447,18 @@
 					<property>
 						<name>yarn.resourcemanager.hostname.rm2</name>
 						<value>slave2</value>
+					</property>
+					<property>
+						<name>yarn.resourcemanager.ha.id</name>
+						<value>rm1</value>
+					</property>
+					<property>
+						<name>yarn.resourcemanager.recovery.enabled</name>
+						<value>true</value>
+					</property>
+					<property>
+						<name>yarn.resourcemanager.store.class</name>
+						<value>org.apache.hadoop.yarn.server.resourcemanager.recovery.ZKRMStateStore</value>
 					</property>
 					<!-- 指定zk集群地址 -->
 					<property>
@@ -478,9 +494,9 @@
 			注：在第一次执行此命令是报错，原因是slave服务器的端口8485没有开启，通过编辑iptables，将
 			相应的端口开启，问题解决。
 				
-			- 在主服务器格式化ZKFC
+			- 在其中一个namenode上初始化ZKFC
 			
-				./hdfs zkfc -format
+				./hdfs zkfc -formatZK (只能格式化一次)
 			
 			执行报错：Error:Could not find or load main class zkfc
 			报错原因在于：错误在配置hdfs-site.xml文件时出错：
@@ -531,3 +547,10 @@
 			解决：
 			
 				详细参照：https://www.cnblogs.com/zlslch/p/9190126.html
+				
+			- resourcemanager未启动，查看日志，报错信息如下：
+			
+			org.apache.hadoop.yarn.exceptions.YarnRuntimeException:Invalid configuration! Can't
+			find valid RM_HA_ID.None of yarn.resourcemanager.address.rm1 yarn.resourcemanager.address.rm2 are matching the local address OR yarn.resourcemanager.ha.id is not specified in HA Configuration
+			
+			
