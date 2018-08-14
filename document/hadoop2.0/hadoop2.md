@@ -447,11 +447,7 @@
 					<property>
 						<name>yarn.resourcemanager.hostname.rm2</name>
 						<value>slave2</value>
-					</property>
-					<property>
-						<name>yarn.resourcemanager.ha.id</name>
-						<value>rm1</value>
-					</property>
+					</property>					
 					<property>
 						<name>yarn.resourcemanager.recovery.enabled</name>
 						<value>true</value>
