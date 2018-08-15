@@ -45,7 +45,7 @@
 
 	- 2T硬盘,64G内存,12核CPU,千兆网卡
 	
-- 集群搭建步骤
+- 集群搭建步骤(参考:https://blog.csdn.net/d470969047h/article/details/52701525)
 
 	- Hostname修改
 	
