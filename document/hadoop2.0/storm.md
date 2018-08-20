@@ -49,9 +49,9 @@
 	
 	生效环境变量：
 	
-	```
+```
 		source /etc/profile
-	```
+```
 	
 # 启动Storm集群
 
