@@ -20,7 +20,7 @@
 	
 	- 文件末尾添加如下配置：
 	
-	```
+```
 		storm.zookeeper.servers:
 			- "10.40.123.200"
 			- "10.40.123.201"
@@ -32,20 +32,20 @@
 			- 6702
 			- 6703
 			- 6700
-	```
+```
 	
 	- 拷贝文件到supervisor机器上
 	
-	```
+```
 		scp -rp storm slave1:~/
-	```
+```
 	
 	- 各个服务器修改环境变量配置文件/etc/profile
-	
-	```
+
+```
 		export STORM_HOME=/home/hadoop
 		export PATH=.:$PATH:$STORM_HOME/bin
-	```
+```
 	
 	生效环境变量：
 	
@@ -57,13 +57,13 @@
 
 	- 启动主节点nimbus
 	
-	```
+```
 		nohup storm nimbus &
 		nohup storm ui &
-	```
+```
 	
 	- 分别启动从节点supervisor
 	
-	```
+```
 		nohup storm supervisor &
-	```
+```
