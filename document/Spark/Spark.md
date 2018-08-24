@@ -52,8 +52,9 @@
 	#增加以下配置项
 	export JAVA_HOME=/home/hadoop/Java/jdk7
 	export SCALA_HOME=/home/hadoop/scala-2.10.4
-	export SPARK_MASTER=master
+	export SPARK_MASTER_IP=10.40.123.200
 	export SPARK_MASTER_PORT=7077
+	export SPARK_MASTER_HOST=10.40.123.200
 	#复制生成slaves文件
 	cp -r slaves.template slaves
 	#编辑slaves文件
@@ -93,3 +94,16 @@
 	在主节点登录查看：
 	
 	http://localhost:8080
+	
+	问题：登录后无法查看workers信息
+	解决：
+		
+		- 开放主机7077端口
+		
+		- spark-env.sh配置文件中的SPARK_MASTER相关属性使用IP地址
+		
+			export SPARK_MASTER_IP=10.40.123.200
+			export SPARK_MASTER_PORT=7077
+			export SPARK_MASTER_HOST=10.40.123.200
+		
+		参考文档：https://blog.csdn.net/u014204541/article/details/80775656
