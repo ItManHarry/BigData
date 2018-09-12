@@ -85,7 +85,7 @@
 		
 			service sshd restart
 		
-	- ssh免密码登录（参考：https://www.linuxidc.com/Linux/2016-10/136200.htm）
+	- ssh免密码登录 - 方式一（参考：https://www.linuxidc.com/Linux/2016-10/136200.htm）
 		
 		- 关闭防火墙，使用root账号：
 		
@@ -148,6 +148,9 @@
 			ssh 目标主机名
 					
 			若能免密登录，则配置成功。
+	- ssh免密码登录 - 方式二
+	
+		执行命令：ssh-copy-id hostname
 		
 	- JDK安装
 	
