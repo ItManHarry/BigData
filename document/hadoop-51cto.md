@@ -200,3 +200,53 @@
 				</property>
 			</configuration>
 		```
+		
+		- 配置hdfs-site.xml
+		
+		```xml
+			<configuration>
+				<property>
+					<!-- 副本数量 -->
+					<name>dfs.replication</name>					
+					<value>1</value>
+				</property>
+			</configuration>
+		```
+		
+		- 配置mapred-site.xml
+		
+		执行：mv mapred-site.xml.template mapred-site.xml
+		
+		```xml
+			<configuration>
+				<property>
+					<name>mapreduce.framework.name</name>					
+					<value>yarn</value>
+				</property>
+			</configuration>
+		```
+		
+		- 配置yarn-site.xml		
+		
+		```xml
+			<configuration>
+				<property>
+					<name>yarn.resourcemanager.hostname</name>					
+					<value>hadoop0</value>
+				</property>
+				<property>
+					<name>yarn.nodemanager.aux-services</name>					
+					<value>mapreduce_shuffle</value>
+				</property>
+			</configuration>
+		```
+		
+		- 配置slaves	
+		
+		```
+			hadoop0
+		```
+	
+	- Hadoop手动启动
+	
+	
