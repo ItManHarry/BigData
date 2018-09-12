@@ -102,7 +102,7 @@
 				
 				service sshd restart
 			
-			- 生成公私钥，退出root账号，在master 机器的虚拟机命令行下输入ssh-keygen -t rsa，一路回车，全部默认。
+			- ssh-keygen -t rsa，一路回车，全部默认。
 			
 			- 导入到本机：cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
 			
@@ -178,7 +178,7 @@
 		
 			tar -zvxf hadoop-2.4.1.tar.gz
 			
-	- Hadoop配置
+	- Hadoop配置(伪分布式)
 	
 		- 配置hadoop-env.sh
 		
@@ -250,3 +250,70 @@
 	- Hadoop手动启动
 	
 	
+		- 格式化namenode
+		
+		```
+			cd /home/hadoop/hadoop-2.4.1/bin
+			./hadoop namenode -format
+		```
+	
+		- 手动启动各个进程
+		
+		```
+			cd /home/hadoop/hadoop-2.4.1/sbin
+			--启动hadoop相关进程
+			./hadoop-daemon.sh start namenode
+			./hadoop-daemon.sh start datanode
+			./hadoop-daemon.sh start secondarynamenode
+			./hadoop-daemon.sh start
+			--查看各个进程对应的端口
+			netstat -nltp
+			--启动yarn相关进程
+			./yarn-daemon.sh start resoucemanager
+			./yarn-daemon.sh start nodemanager
+		```
+		
+		- 自动化脚本启动
+		
+		```
+			cd /home/hadoop/hadoop-2.4.1/sbin
+			./start-dfs.sh
+			./start-yarn.sh
+		```
+	
+	- Hadoop配置(分布式)
+	
+		- 配置ssh免密登录
+		
+			- 关闭防火墙
+		
+			- 拷贝主机(hadoop0)sshid：
+			
+				ssh-copy-id hadoop1
+				ssh-copy-id hadoop2
+				
+		- JDK安装
+
+			scp拷贝jdk至各个节点
+			
+			设置环境变量：/etc/profile
+			
+			source /etc/profile生效
+			
+			
+		- hadoop安装
+		
+			scp拷贝hadoop至各个节点
+			
+			删除各个节点hadoop下的tmp文件夹
+			
+		- 主节点启动集群
+		
+			./start-dfs.sh
+			./start-yarn.sh
+			
+		- 动态新增节点
+		
+			- 配置新机器网络
+			
+			- 拷贝hadoop到新机器
