@@ -314,8 +314,14 @@
 			
 		- 动态新增节点
 		
-			- 配置新机器网络
+			- 配置新机器网络，ip&hostname
 			
-			- 配置hosts
+			- 配置主服务器hosts
 			
-			- 拷贝hadoop到新机器
+			- 配置主服务器和新服务器之间的ssh免密登录 ： ssh-copy-id hadoop-x
+			
+			- 拷贝jdk至新服务器，配置java环境变量
+			
+			- 拷贝hadoop到新机器,删除hadoop目录下的tmp文件夹
+			
+			- 新服务器手动启动datanode ： ./hadoop-daemon.sh start datanode
