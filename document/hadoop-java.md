@@ -182,6 +182,24 @@
 			IOUtils.copyBytes(in, out, new Configuration());
 			IOUtils.closeStream(in);
 			IOUtils.closeStream(out);
+			fs.close();
+		}
+		/**
+		 * 测试文件内容读取
+		 * @throws IOException
+		 */
+		@Test
+		public void testRead() throws IOException{
+			Path path = new Path("/test/test.log");
+			FSDataInputStream in = fs.open(path);
+			byte[] b = new byte[128];
+			int content = in.read(b);
+			while(content != -1){
+				System.out.println("Content is : " + new String(b));
+				content = in.read(b);
+			}
+			in.close();
+			fs.close();
 		}
 		/**
 		 * 使用流进行下载文件
@@ -195,6 +213,7 @@
 			IOUtils.copyBytes(in, out, new Configuration());
 			IOUtils.closeStream(in);
 			IOUtils.closeStream(out);
+			fs.close();
 		}
 		/**
 		 * 使用流进行文件上传
@@ -207,6 +226,7 @@
 			IOUtils.copyBytes(in, out, 4096);
 			IOUtils.closeStream(in);
 			IOUtils.closeStream(out);
+			fs.close();
 		}
 	}
 ```
