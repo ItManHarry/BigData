@@ -180,6 +180,11 @@
 			
 	- Hadoop配置(伪分布式)
 	
+		- 创建logs/tmp文件夹
+		
+			mkdir logs
+			mkdir tmp
+			
 		- 配置hadoop-env.sh
 		
 			修改JAVA_HOME为本地JDK即可
@@ -208,7 +213,7 @@
 				<property>
 					<!-- 副本数量 -->
 					<name>dfs.replication</name>					
-					<value>1</value>
+					<value>3</value>
 				</property>
 			</configuration>
 		```
