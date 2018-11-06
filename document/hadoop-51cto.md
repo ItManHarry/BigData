@@ -84,7 +84,7 @@
 		
 			vi /etc/selinux/config
 			
-			找到SELINUX并修改为：SELINUX=disable，保存退出。
+			找到SELINUX并修改为：SELINUX=disabled，保存退出。
 		
 			- 修改sshd的配置文件（root权限）
 		
