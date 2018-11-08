@@ -76,74 +76,32 @@
 		
 		- 关闭防火墙
 		
-			执行：chkconfig iptables on/off
-		
-		- ssh免密登录
-		
-			- 关闭防火墙，使用root账号：
-		
-			vi /etc/selinux/config
+			1.执行：chkconfig iptables on/off
+			
+			2.使用root账号：
+			
+				# vi /etc/selinux/config					
 			
 			找到SELINUX并修改为：SELINUX=disabled，保存退出。
 		
-			- 修改sshd的配置文件（root权限）
+		- ssh免密登录
 		
-				vi /etc/ssh/sshd_config
+			- 主节点生成ssh秘钥-使用普通账号即可（如：hadoop）：
 				
-				找到以下内容，并去掉井号注释符：
-				
-				| 配置项|
-				| --- |
-				| RSAAuthentication yes |
-				| PubkeyAuthentication yes |
-				| AuthorizedKeysFile      .ssh/authorized_keys |					
-				
-				保存退出后，重启ssh：
-				
-				service sshd restart
+				ssh-keygen -t rsa，一路回车，全部默认。
 			
-			- ssh-keygen -t rsa，一路回车，全部默认。
-			
-			- 导入到本机：cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
-			
-			- 修改文件权限：
-					
-				chmod 700 ~/.ssh
+			- 配置hosts文件
 				
-				chmod 600 ~/.ssh/authorized_keys	
+				root: vi /etc/hosts
+			
+			- 执行命令：ssh-copy-id hostname(names in hosts file)
 				
 			- 本机测试：
 			
-				ssh locahost
+				ssh hostname(name in hosts file)
+			- 
 				
-				如果能够登录，即验证成功，继续以下操作。
 			
-			- 在所有的slave机器上，也在命令行中输入ssh-keygen -t rsa，一路回车，全部默认。
-			
-			- 在master机器上复制master的授权文件到各个slave机器：
-			
-				scp ~/.ssh/id_rsa.pub root@目标主机ip或主机名:/home/id_rsa.pub
-				
-				注意把文件传送到目标主机时，要用root用户，否则会因权限不够而拒绝。输入目标主机密码后，出现OK即传输成功。
-				
-			-  登录到各目标主机，把公钥导入到认证文件（非root账号）
-			
-				cat /home/id_rsa.pub >> ~/.ssh/authorized_keys
-			
-			- 修改文件权限：
-			
-				chmod 700 ~/.ssh
-				
-				chmod 600 ~/.ssh/authorized_keys
-
-			- 测试 ，在master上执行:
-					
-				ssh 目标主机名
-						
-				若能免密登录，则配置成功。
-		- ssh免密码登录 - 方式二
-		
-			执行命令：ssh-copy-id hostname
 				
 
 	- JDK安装
