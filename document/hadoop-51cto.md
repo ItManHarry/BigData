@@ -74,35 +74,31 @@
 			
 		- 修改/etc/hosts文件：新增IP地址和主机名即可
 		
-		- 关闭防火墙
+		- 关闭防火墙(一定要执行以下操作,操作完成后重启)
 		
-			1.执行：chkconfig iptables on/off
+			1.执行：chkconfig iptables off
 			
 			2.使用root账号：
 			
 				# vi /etc/selinux/config					
 			
-			找到SELINUX并修改为：SELINUX=disabled，保存退出。
+				找到SELINUX并修改为：SELINUX=disabled，保存退出。
 		
 		- ssh免密登录
 		
 			- 主节点生成ssh秘钥-使用普通账号即可（如：hadoop）：
 				
-				ssh-keygen -t rsa，一路回车，全部默认。
+				ssh-keygen，一路回车，全部默认。
 			
 			- 配置hosts文件
 				
 				root: vi /etc/hosts
 			
-			- 执行命令：ssh-copy-id hostname(names in hosts file)
+			- 执行命令：ssh-copy-id hostname(hosts文件中的各个主机名称)
 				
-			- 本机测试：
+			- 免密登录测试：
 			
-				ssh hostname(name in hosts file)
-			- 
-				
-			
-				
+				ssh hostname(hosts文件中的各个主机名称)				
 
 	- JDK安装
 	
@@ -194,7 +190,8 @@
 		```xml
 			<configuration>
 				<property>
-					<name>yarn.resourcemanager.hostname</name>					
+					<name>yarn.resourcemanager.hostname</name>
+					<!-- 主机名 -->					
 					<value>hadoop0</value>
 				</property>
 				<property>
@@ -207,7 +204,10 @@
 		- 配置slaves	
 		
 		```
-			hadoop0
+			hadoop1
+			hadoop2
+			hadoop3
+			...
 		```
 	
 	- Hadoop手动启动
@@ -250,6 +250,14 @@
 		
 			- 关闭防火墙
 		
+				1.执行：chkconfig iptables off
+			
+				2.使用root账号：
+				
+					# vi /etc/selinux/config					
+				
+					找到SELINUX并修改为：SELINUX=disabled，保存退出。
+
 			- 拷贝主机(hadoop0)sshid：
 			
 				ssh-copy-id hadoop1
@@ -268,7 +276,7 @@
 		
 			scp拷贝hadoop至各个节点
 			
-			删除各个节点hadoop下的tmp文件夹
+			删除各个节点hadoop下的tmp文件夹(一定要删除)
 			
 		- 主节点启动集群
 		
@@ -277,7 +285,7 @@
 			
 		- 动态新增节点
 		
-			- 配置新机器网络，ip&hostname
+			- 配置新机器网络，ip&hostname&hosts(和主机一致,即所有服务节点的hosts文件保持一致)
 			
 			- 配置主服务器hosts
 			
