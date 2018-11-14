@@ -8,6 +8,7 @@ import java.net.URLConnection;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FSDataOutputStream;
+import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.FsUrlStreamHandlerFactory;
 import org.apache.hadoop.fs.Path;
@@ -110,5 +111,31 @@ public class TestHDFS273 {
 		Path path = new Path("/dses/note2.txt");
 		fs.delete(path, true);
 		fs.close();
+	}
+	/**
+	 * 递归打印文件路径
+	 */
+	@Test
+	public void printAllPath(){
+		Path path = new Path("/");
+		doPrintPath(fs, path);
+	}
+	
+	private void doPrintPath(FileSystem fileSystem, Path path){
+		System.out.println(path.toUri().toString());
+		try {
+			if(fileSystem.isDirectory(path)){
+				FileStatus[] sts = fs.listStatus(path);
+				if(sts != null && sts.length > 0){
+					for(FileStatus s : sts){
+						Path p = s.getPath();
+						doPrintPath(fileSystem, p);
+					}
+				}
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
