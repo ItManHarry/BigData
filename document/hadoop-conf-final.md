@@ -200,12 +200,7 @@
 			
 			设置环境变量：/etc/profile
 			
-			source /etc/profile生效
-			
-		- 修改hosts文件
-
-			从主机（namenode节点服务器）copy hosts文件即可
-			
+			source /etc/profile生效			
 			
 		- hadoop安装
 		
@@ -220,7 +215,9 @@
 			
 		- 动态新增节点
 		
-			- 配置新机器网络，ip&hostname&hosts(和主机一致,即所有服务节点的hosts文件保持一致)
+			- 新增hadoop用户
+		
+			- 配置新机器网络，关闭防火墙，ip&hostname&hosts(和主机一致,即所有服务节点的hosts文件保持一致)
 			
 			- 配置主服务器hosts
 			
