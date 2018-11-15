@@ -96,84 +96,84 @@
 		
 		- 配置hdfs-site.xml
 		
-		```xml
-			<configuration>
-				<property>
-					<!-- 副本数量 -->
-					<name>dfs.replication</name>					
-					<value>3</value>
-				</property>
-			</configuration>
-		```
+```xml
+	<configuration>
+		<property>
+			<!-- 副本数量 -->
+			<name>dfs.replication</name>					
+			<value>3</value>
+		</property>
+	</configuration>
+```
 		
 		- 配置mapred-site.xml
 		
 		执行：mv mapred-site.xml.template mapred-site.xml
 		
-		```xml
-			<configuration>
-				<property>
-					<name>mapreduce.framework.name</name>					
-					<value>yarn</value>
-				</property>
-			</configuration>
-		```
+```xml
+	<configuration>
+		<property>
+			<name>mapreduce.framework.name</name>					
+			<value>yarn</value>
+		</property>
+	</configuration>
+```
 		
 		- 配置yarn-site.xml		
 		
-		```xml
-			<configuration>
-				<property>
-					<name>yarn.resourcemanager.hostname</name>
-					<!-- 主机名 -->					
-					<value>hadoop0</value>
-				</property>
-				<property>
-					<name>yarn.nodemanager.aux-services</name>					
-					<value>mapreduce_shuffle</value>
-				</property>
-			</configuration>
-		```
+```xml
+	<configuration>
+		<property>
+			<name>yarn.resourcemanager.hostname</name>
+			<!-- 主机名 -->					
+			<value>hadoop0</value>
+		</property>
+		<property>
+			<name>yarn.nodemanager.aux-services</name>					
+			<value>mapreduce_shuffle</value>
+		</property>
+	</configuration>
+```
 		
 		- 配置slaves	
 		
-		```
-			hadoop0
-		```
+```
+	hadoop0
+```
 	
 	- Hadoop手动启动
 	
 	
 		- 格式化namenode
 		
-		```
-			cd /home/hadoop/hadoop-2.4.1/bin
-			./hadoop namenode -format
-		```
+```
+	cd /home/hadoop/hadoop-2.4.1/bin
+	./hadoop namenode -format
+```
 	
 		- 手动启动各个进程
 		
-		```
-			cd /home/hadoop/hadoop-2.4.1/sbin
-			--启动hadoop相关进程
-			./hadoop-daemon.sh start namenode
-			./hadoop-daemon.sh start datanode
-			./hadoop-daemon.sh start secondarynamenode
-			./hadoop-daemon.sh start
-			--查看各个进程对应的端口
-			netstat -nltp
-			--启动yarn相关进程
-			./yarn-daemon.sh start resoucemanager
-			./yarn-daemon.sh start nodemanager
-		```
+```
+	cd /home/hadoop/hadoop-2.4.1/sbin
+	--启动hadoop相关进程
+	./hadoop-daemon.sh start namenode
+	./hadoop-daemon.sh start datanode
+	./hadoop-daemon.sh start secondarynamenode
+	./hadoop-daemon.sh start
+	--查看各个进程对应的端口
+	netstat -nltp
+	--启动yarn相关进程
+	./yarn-daemon.sh start resoucemanager
+	./yarn-daemon.sh start nodemanager
+```
 		
 		- 自动化脚本启动
 		
-		```
-			cd /home/hadoop/hadoop-2.4.1/sbin
-			./start-dfs.sh
-			./start-yarn.sh
-		```
+```
+	cd /home/hadoop/hadoop-2.4.1/sbin
+	./start-dfs.sh
+	./start-yarn.sh
+```
 	
 	- Hadoop配置(分布式)
 	
