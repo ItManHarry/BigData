@@ -202,6 +202,10 @@
 			
 			source /etc/profile生效
 			
+		- 修改hosts文件
+
+			从主机（namenode节点服务器）copy hosts文件即可
+			
 			
 		- hadoop安装
 		
