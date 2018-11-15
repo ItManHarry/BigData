@@ -34,3 +34,74 @@
 			<value>file-path</value>
 		</property>
 	```
+
+# Hadoop机架感知
+
+	- 概念：	
+	机架感知是一种计算不同计算节点（TT）的距离的技术，用以在任务调度过程中尽量减少网络带宽资源的消耗，这里用尽量，想表达的是当一个TT申请不到本地化任务时，JT会尽量调度一个机架的任务给他，因为不同机架的网络带宽资源比同一个机架的网络带宽资源更可贵。当然，机架感知不仅仅用在MR中，同样还用在HDFS数据块备份过程中（第一个replica选择本节点【如果上传是DataNode】或者随机的一个DN（系统会尽量避免存储太满和太忙的节点），第二个节点选择于第一个节点不同机架的DN，第三个选择放在第二个DN同一个机架的另一个DN上）
+	
+	- 编写java代码
+	
+```java
+	package com.doosan.hadoop.switcher;
+	import java.util.ArrayList;
+	import java.util.List;
+	import org.apache.hadoop.net.DNSToSwitchMapping;
+	/**
+	 * 机架感知实现
+	 */
+	public class DoosanDNSToSwitchMapping implements DNSToSwitchMapping {
+
+		@Override
+		public void reloadCachedMappings() {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void reloadCachedMappings(List<String> arg0) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public List<String> resolve(List<String> names) {
+			List<String> list = new ArrayList<String>();
+			int ip = 0;
+			for(String name : names){
+				if(name.startsWith("10")){
+					ip = Integer.parseInt(name.substring(name.lastIndexOf(".") + 1));
+				}else{
+					ip = Integer.parseInt(name.substring(1));
+				}
+				if(ip <= 212){
+					list.add("/rack1/s"+ip);
+				}else{
+					list.add("/rack2/s"+ip);
+				}
+			}
+			return list;
+		}
+	}
+```
+	- eclipse打包jar
+	
+	- 上传jar包至每个节点，上传路径：${hadoop_home}/share/hadoop/common/lib/
+	
+	- 配置每台hadoop的core-site.xml文件
+	
+```xml
+	<property>
+	  <name>topology.node.switch.mapping.impl</name>
+	  <value>com.doosan.hadoop.switcher.DoosanDNSToSwitchMapping</value>   #类的全名
+	</property>
+```
+
+	- 启动集群
+	
+		start-dfs.sh
+		start-yarn.sh
+		
+	- 验证：在任意一台机器上执行：hadoop dfsadmin -printTopology
+	
+	
