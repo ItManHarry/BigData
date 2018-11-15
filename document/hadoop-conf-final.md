@@ -79,20 +79,20 @@
 			
 		- 配置 core-site.xml
 		
-		```xml
-			<configuration>
-				<property>
-					<name>fs.defaultFS</name>
-					<!-- uri格式：hdfs://主机名:端口号 -->
-					<value>hdfs://hadoop0:9000</value>
-				</property>
-				<property>
-					<!-- hadoop进程临时目录 -->
-					<name>hadoop.tmp.dir</name>
-					<value>/home/hadoop/hadoop-2.4.1/tmp</value>
-				</property>
-			</configuration>
-		```
+```xml
+	<configuration>
+		<property>
+			<name>fs.defaultFS</name>
+			<!-- uri格式：hdfs://主机名:端口号 -->
+			<value>hdfs://hadoop0:9000</value>
+		</property>
+		<property>
+			<!-- hadoop进程临时目录 -->
+			<name>hadoop.tmp.dir</name>
+			<value>/home/hadoop/hadoop-2.4.1/tmp</value>
+		</property>
+	</configuration>
+```
 		
 		- 配置hdfs-site.xml
 		
