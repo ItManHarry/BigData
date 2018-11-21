@@ -67,17 +67,14 @@
 		@Override
 		public List<String> resolve(List<String> names) {
 			List<String> list = new ArrayList<String>();
-			int ip = 0;
+			int index = 0; 
+			//此处传递的是slaves配置文件中的各个data node节点
 			for(String name : names){
-				if(name.startsWith("10")){
-					ip = Integer.parseInt(name.substring(name.lastIndexOf(".") + 1));
+				index = Integer.parseInt(name.substring(name.length() - 1));
+				if(index <= 2){
+					list.add("/rack1/"+name);
 				}else{
-					ip = Integer.parseInt(name.substring(1));
-				}
-				if(ip <= 212){
-					list.add("/rack1/s"+ip);
-				}else{
-					list.add("/rack2/s"+ip);
+					list.add("/rack2/"+name);
 				}
 			}
 			return list;
