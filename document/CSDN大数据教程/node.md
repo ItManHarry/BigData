@@ -101,4 +101,33 @@
 		
 	- 验证：在任意一台机器上执行：hadoop dfsadmin -printTopology
 	
+# Hadoop归档(archive)
 	
+	- 执行hadoop命令:
+	
+```
+	hadoop archive -archiveName files.har(file name) /my/files(files to be archived) /my(file archived save path)
+```
+	har归档产生一个目录，目录名称就是xxx.har，该目录下有相关的文件。
+	
+	_index  //索引文件
+	part-0	//数据文件
+	
+	文件目录查看：
+	
+```
+	$> hdfs dfs -lsr har:///my/files.har/my/file/dir
+```
+
+# 数据完整性
+
+	- 校验和
+	
+		数据校验CRC-32(循环冗余校验)，任何大小的数据输入均计算得到一个32位的整数校验和。
+
+		io.file.buffer.size	//指定多少字节校验一次
+	
+	datanode
+	
+	blk_xxxx			//块数据，没有元数据
+	blk_xxxx_xxx.meta	//校验和数据，4个字节对应512数据字节，7个字节的都信息
