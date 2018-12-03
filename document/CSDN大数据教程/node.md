@@ -140,8 +140,24 @@
 	
 # 文件压缩
 
-	减少存储空间，提高传输效率
+	- 减少存储空间，提高传输效率
 	
 | 压缩格式 | 压缩工具 | 压缩算法 | 文件扩展名 | 是否可切割 |
 | --- | --- | --- | --- | --- |
 | DEFLATE | 无 | DEFLATE | .deflate | 否 |
+| Gzip | gzip | DEFLATE | .gz | 否 |
+| bzip2 | bzip2 | bzip2 | .bz2 | 是 |
+| LZO | lzop | LZO | .lzo | 否 |
+| LZ4 | 无 | LZ4 | .lz4 | 否 |
+| Snappy | 无 | Snappy | .Snappy | 否 |
+
+	- Codec
+
+| 压缩格式 | HadoopCompressionCodec |
+| --- | --- |
+| DEFLATE | org.apache.hadoop.io.compress.DefaultCodec |
+| Gzip | org.apache.hadoop.io.compress.GzipCodec |
+| bzip2 | org.apache.hadoop.io.compressBZip2Codec |
+| LZO | com.hadoop.compression.lzo.LzoCodec |
+| LZ4 | org.apache.hadoop.io.compress.Lz4Codec |
+| Snappy | org.apache.hadoop.io.compress.SnappyCodec |
