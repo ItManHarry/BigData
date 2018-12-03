@@ -126,8 +126,22 @@
 		数据校验CRC-32(循环冗余校验)，任何大小的数据输入均计算得到一个32位的整数校验和。
 
 		io.file.buffer.size	//指定多少字节校验一次
+		hdfs dfs -get -crc xxx //下载文件时，同时下载校验和文件
+		hdfs dfs -get -ignoreCrc xxx //下载文件时，不下载校验和文件
 	
 	datanode
 	
 	blk_xxxx			//块数据，没有元数据
 	blk_xxxx_xxx.meta	//校验和数据，4个字节对应512数据字节，7个字节的都信息
+	- 客户端关闭校验和
+	FileSystem fs = ...;
+	fs.setVerifyChecksum(false);
+	fs.open(...);
+	
+# 文件压缩
+
+	减少存储空间，提高传输效率
+	
+	| 压缩格式 | 压缩工具 | 压缩算法 | 文件扩展名 | 是否可切割 |
+	| --- | --- | --- | --- | --- |
+	| DEFLATE | 无 | DEFLATE | .deflate | 否 |
