@@ -170,7 +170,7 @@
 		
 		- fsimage 	//镜像文件
 
-	- 设置secondary namenode 设置成独立节点，修改配置文件hdfs-site.html
+	- 设置secondary namenode 设置成独立节点，修改牌子文件hdfs-site.html
 	增加如下配置项目：
 	
 ```xml
