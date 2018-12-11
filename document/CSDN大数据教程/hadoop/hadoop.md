@@ -277,7 +277,8 @@
 	- 回收站[core-site.xml]
 	
 	控制文件在trash中的存活时间(分钟数),服务端和客户端均可进行设置
-```
+	
+```xml
 	<property>
 	  <name>fs.trash.interval</name>
 	  <value>0</value>
