@@ -170,7 +170,7 @@
 		
 		- fsimage 	//镜像文件
 
-	- 设置secondary namenode 设置成独立节点，修改牌子文件hdfs-site.html
+	- 设置secondary namenode 设置成独立节点，修改配置文件hdfs-site.html
 	增加如下配置项目：
 	
 ```xml
@@ -196,4 +196,101 @@
 		
 		- 使用-importCheckpoint选项启动namenode守护进程
 		
+
+	- 配置管理,多目录设置(配置文件hdfs-core.xml)
+	
+		- 单目录设置如下属性即可
+	
+```xml
+	<property>
+		<name>hadoop.tmp.dir</name>
+		<value>/home/hadoop/tmp</value>
+	</property>
+```
+
+		- 配置多个目录(namenode)
+	
+```xml
+	<property>
+		<name>dfs.namenode.name.dir</name>
+		<!-- 每个目录中的文件相同，起到副本的作用 -->
+		<value>file:///home/hadoop/name1,file:///home/hadoop/name2</value>
+	</property>
+```	
+
+		- 配置多个目录(datanode)
+	
+```xml
+	<property>
+		<name>dfs.datanode.data.dir</name>
+		<!-- 每个目录中的文件不同，数据节点本身存在副本 -->
+		<value>file:///home/hadoop/data1,file:///home/hadoop/data2</value>
+	</property>
+```	
+	注：配置多目录的应用场景主要是磁盘扩容的时候，增加namendoe和datanode存放路径。
+
+	
+	- hadoop配额管理
+	
+		- 配额分类
+		
+			- space quota 	//空间配额
+		
+			- dir quota		//目录配额
+		
+		- 设置命令(目录配额 )
+		
+			hdfs  dfsadmin -setQuota 2 /usr/...
+			
+		- 设置命令(空间配额 )
+		
+			hdfs  dfsadmin -setSpaceQuota 11 hadoop
+			
+	- 快照管理
+	
+		-快速备份
+		
+		hdfs dfsadmin -allowSnapshot dir_name 		//启用指定目录快照
+		hdfs dfsadmin -disallowSnapshot dir_name 	//停用指定目录快照
+		hdfs dfs [-createSnapshot <snapshotDir> [snapshotName]] 	//创建快照
+		hdfs dfs [-deleteSnapshot <snapshotDir> [snapshotName]] 	//删除快照
+		hdfs lsSnapshottableDir						//列出所有可以快照的目录
+		
+	- 块扫描器
+
+	数据节点每隔多少个小时扫描块数据，进行校验和计算[hdfs-site.xml]
+	
+```xml
+	<property>
+		<name>dfs.datanode.scan.period.hours</name>
+		<!-- 小时数(3周) -->
+		<!-- 如果value是,则使用默认值504;如果是负数,扫描器则关闭		-->
+		<value>504</value>		
+	</property>
+```		
+
+	- 启动均衡器
+	
+		执行：start-balancer.sh
+		
+		
+	- 回收站[core-site.xml]
+	
+	控制文件在trash中的存活时间(分钟数),服务端和客户端均可进行设置
+```
+	<property>
+	  <name>fs.trash.interval</name>
+	  <value>0</value>
+	  <description>Number of minutes after which the checkpoint
+	  gets deleted.  If zero, the trash feature is disabled.
+	  This option may be configured both on the server and the
+	  client. If trash is disabled server side then the client
+	  side configuration is checked. If trash is enabled on the
+	  server side then the value configured on the server is
+	  used and the client configuration value is ignored.
+	  </description>
+	</property>
+```
+	
+	
 	
