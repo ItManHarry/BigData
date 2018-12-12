@@ -333,34 +333,39 @@
 
 	- 新增节点步骤
 	
-		1.配置hdfs-site.xml的dfs.hosts属性(/home/hadoop/hadoop-2.7.3/etc/hadoop/datatnodes.include.host)
-	
-		2.配置新datanode服务器的网络,关闭防火墙,SSH,JDK,Hadoop,hosts文件,hostname
+		1.配置新datanode服务器的网络,关闭防火墙,SSH,JDK,Hadoop,hosts文件,hostname（参考hadoop-conf-final.md文件）
 		
-		3.配置完成后重启服务器		
-		4.修改namenode的hosts文件,增加新的datanode节点信息,配置完成后分发至各个服务器;配置SSH免密登录新datanode节点
+		2.配置完成后重启服务器		
 		
-		5.更新namenode,执行如下命令：
-		
-			$> hdfs dfsadmin -refreshNodes
-			
-		6.更新resource manager,执行命令：
-		
-			$> yarn rmadmin -refreshNodes
-		
-		7.更新slaves文件,增加新的datanode节点信息
-
-		8.启动新的datanode和node manager
+		3.启动新的datanode和node manager
 		
 			- 启动datanode
 			
 			$> hadoop-daemon.sh start datanode
 			
+			$> yarn-daemon.sh start nodemanager
+			
 			- 再平衡
 			
 			$> ./bin/start-balancer.sh
 			
-		9.在web UI确定一下节点信息
+		4.修改namenode的hosts文件,增加新的datanode节点信息,配置完成后分发至各个服务器;配置SSH免密登录新datanode节点
+	
+		5.配置hdfs-site.xml的dfs.hosts属性(/home/hadoop/hadoop-2.7.3/etc/hadoop/datatnodes.include.host)
+		
+		6.更新/home/hadoop/hadoop-2.7.3/etc/hadoop/datatnodes.include.host文件，增加新节点
+		
+		7.更新namenode,执行如下命令：
+		
+			$> hdfs dfsadmin -refreshNodes
+			
+		8.更新resource manager,执行命令：
+		
+			$> yarn rmadmin -refreshNodes
+		
+		9.更新slaves文件,增加新的datanode节点信息		
+			
+		10.在web UI确定一下节点信息
 		
 	- include和exclude优先级，include高于exclude
 	
