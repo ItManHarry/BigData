@@ -300,12 +300,14 @@
 
 - 在namenode节点新增datanodes.host文件,文件内容为各个datanode的hostname
 
+```
 	Server1
 	Server2
 	Server3
 	Server4
 	Server5
 	Server6
+```
 	
 - include和exclude优先级，include高于exclude
 	
@@ -358,11 +360,11 @@
 
 - 新增节点步骤
 
-	1. 配置新datanode服务器的网络,关闭防火墙,SSH,JDK,Hadoop,hosts文件,hostname（参考hadoop-conf-final.md文件）
+	- 配置新datanode服务器的网络,关闭防火墙,SSH,JDK,Hadoop,hosts文件,hostname（参考hadoop-conf-final.md文件）
 	
-	2. 配置完成后重启服务器		
+	- 配置完成后重启服务器		
 	
-	3. 启动新的datanode和node manager
+	- 启动新的datanode和node manager
 	
 		- 启动datanode
 		
@@ -374,42 +376,42 @@
 		
 			$> ./bin/start-balancer.sh
 		
-	4. 修改namenode的hosts文件,增加新的datanode节点信息,配置完成后分发至各个服务器;配置SSH免密登录新datanode节点		
+	- 修改namenode的hosts文件,增加新的datanode节点信息,配置完成后分发至各个服务器;配置SSH免密登录新datanode节点		
 	
-	5. 更新/home/hadoop/hadoop-2.7.3/etc/hadoop/datatnodes.include.host文件，增加新节点
+	- 更新/home/hadoop/hadoop-2.7.3/etc/hadoop/datatnodes.include.host文件，增加新节点
 	
-	6. 更新namenode,执行如下命令：
+	- 更新namenode,执行如下命令：
 	
 		$> hdfs dfsadmin -refreshNodes
 		
-	7. 更新resource manager,执行命令：
+	- 更新resource manager,执行命令：
 	
 		$> yarn rmadmin -refreshNodes
 	
-	8. 更新slaves文件,增加新的datanode节点信息		
+	- 更新slaves文件,增加新的datanode节点信息		
 		
-	9. 在web UI确定一下节点信息
+	- 在web UI确定一下节点信息
 	
 - 退役节点步骤
 
-	1. 编辑/home/hadoop/hadoop-2.7.3/etc/hadoop/datatnodes.exclude.host文件
+	- 编辑/home/hadoop/hadoop-2.7.3/etc/hadoop/datatnodes.exclude.host文件
 		
-	2. 刷新namenode
+	- 刷新namenode
 
 		$> hdfs dfsadmin -refreshNodes
 		
 		$> yarn rmadmin -refreshNodes
 		
-	3. web UI确认退役节点状态为"Decommissioned"，停止datanode。
+	- web UI确认退役节点状态为"Decommissioned"，停止datanode。
 	
 		$> hadoop-daemon.sh stop datanode
 		
-	4. 在/home/hadoop/hadoop-2.7.3/etc/hadoop/datatnodes.include.host文件中移除退役的节点
+	- 在/home/hadoop/hadoop-2.7.3/etc/hadoop/datatnodes.include.host文件中移除退役的节点
 	
-	5. 再次执行namenode刷新命令
+	- 再次执行namenode刷新命令
 	
 		$> hdfs dfsadmin -refreshNodes
 		
 		$> yarn rmadmin -refreshNodes
 		
-	6. 从slaves文件中删除退役的节点
+	- 从slaves文件中删除退役的节点
