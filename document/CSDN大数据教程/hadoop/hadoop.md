@@ -165,7 +165,7 @@
 
 # hadoop管理
 
-- namenode名称节点的本地目录
+## namenode名称节点的本地目录
 
 	- edits 	//编辑日志
 	
@@ -199,7 +199,7 @@
 	- 使用-importCheckpoint选项启动namenode守护进程
 	
 
-- 配置管理,多目录设置(配置文件hdfs-core.xml)
+## 配置管理,多目录设置(配置文件hdfs-core.xml)
 
 - 单目录设置如下属性即可
 	
@@ -232,25 +232,25 @@
 	注：配置多目录的应用场景主要是磁盘扩容的时候，增加namendoe和datanode存放路径。
 
 	
-- hadoop配额管理
+## hadoop配额管理
 	
-	- 配额分类
-	
-		- space quota 	//空间配额
-	
-		- dir quota		//目录配额
-	
-	- 设置命令(目录配额 )
-	
-		hdfs  dfsadmin -setQuota 2 /usr/...
-		
-	- 设置命令(空间配额 )
-	
-		hdfs  dfsadmin -setSpaceQuota 11 hadoop
-		
-- 快照管理
+- 配额分类
 
-	-快速备份
+	- space quota 	//空间配额
+
+	- dir quota		//目录配额
+
+- 设置命令(目录配额 )
+
+	hdfs  dfsadmin -setQuota 2 /usr/...
+	
+- 设置命令(空间配额 )
+
+	hdfs  dfsadmin -setSpaceQuota 11 hadoop
+		
+## 快照管理
+
+- 快速备份
 		
 	hdfs dfsadmin -allowSnapshot dir_name 		//启用指定目录快照
 	hdfs dfsadmin -disallowSnapshot dir_name 	//停用指定目录快照
@@ -258,7 +258,7 @@
 	hdfs dfs [-deleteSnapshot <snapshotDir> [snapshotName]] 	//删除快照
 	hdfs lsSnapshottableDir						//列出所有可以快照的目录
 		
-- 块扫描器
+## 块扫描器
 
 	数据节点每隔多少个小时扫描块数据，进行校验和计算[hdfs-site.xml]
 	
@@ -271,11 +271,11 @@
 	</property>
 ```		
 
-- 启动均衡器
+## 启动均衡器
 
-	执行：start-balancer.sh		
+	执行：./sbin/start-balancer.sh		
 	
-- 回收站[core-site.xml]
+## 回收站[core-site.xml]
 	
 	控制文件在trash中的存活时间(分钟数),服务端和客户端均可进行设置
 	
@@ -294,20 +294,29 @@
 	</property>
 ```
 
-- 节点的上线和下线(Commission&Discommission)
+## 节点的上线和下线(Commission&Discommission)
 
-	- slaves文件仅在集群启动/停止操作才访问
+- slaves文件仅在集群启动/停止操作才访问
+
+- 在namenode节点新增datanodes.host文件,文件内容为各个datanode的hostname
+
+	Server1
+	Server2
+	Server3
+	Server4
+	Server5
+	Server6
 	
-	- 在namenode节点新增datanodes.host文件,文件内容为各个datanode的hostname
+- include和exclude优先级，include高于exclude
 	
-		Server1
-		Server2
-		Server3
-		Server4
-		Server5
-		Server6
-	
-	- 配置文件hdfs-site.xml
+| Include | Exclude | Result | 
+| --- | --- | --- |
+| N | N | 不可连接 |
+| N | Y | 不可连接 |
+| Y | N | 可以连接 |
+| Y | Y | 可以连接,状态为退役状态 |
+
+- 配置文件hdfs-site.xml
 		
 ```xml
 	<!-- 决定数据节点能否连接到namenode	-->	
@@ -332,7 +341,7 @@
 	</property>
 ```
 
-	- 配置文件yarn-site.xml
+- 配置文件yarn-site.xml
 		
 ```xml
 	<property>    
@@ -347,68 +356,60 @@
 	</property>
 ```
 
-- 新增节点步骤	
-	1.配置新datanode服务器的网络,关闭防火墙,SSH,JDK,Hadoop,hosts文件,hostname（参考hadoop-conf-final.md文件）
+- 新增节点步骤
+
+	1. 配置新datanode服务器的网络,关闭防火墙,SSH,JDK,Hadoop,hosts文件,hostname（参考hadoop-conf-final.md文件）
 	
-	2.配置完成后重启服务器		
+	2. 配置完成后重启服务器		
 	
-	3.启动新的datanode和node manager
+	3. 启动新的datanode和node manager
 	
 		- 启动datanode
 		
-		$> hadoop-daemon.sh start datanode
+			$> hadoop-daemon.sh start datanode
 		
-		$> yarn-daemon.sh start nodemanager
+			$> yarn-daemon.sh start nodemanager
 		
 		- 再平衡
 		
-		$> ./bin/start-balancer.sh
+			$> ./bin/start-balancer.sh
 		
-	4.修改namenode的hosts文件,增加新的datanode节点信息,配置完成后分发至各个服务器;配置SSH免密登录新datanode节点		
+	4. 修改namenode的hosts文件,增加新的datanode节点信息,配置完成后分发至各个服务器;配置SSH免密登录新datanode节点		
 	
-	5.更新/home/hadoop/hadoop-2.7.3/etc/hadoop/datatnodes.include.host文件，增加新节点
+	5. 更新/home/hadoop/hadoop-2.7.3/etc/hadoop/datatnodes.include.host文件，增加新节点
 	
-	6.更新namenode,执行如下命令：
+	6. 更新namenode,执行如下命令：
 	
 		$> hdfs dfsadmin -refreshNodes
 		
-	7.更新resource manager,执行命令：
+	7. 更新resource manager,执行命令：
 	
 		$> yarn rmadmin -refreshNodes
 	
-	8.更新slaves文件,增加新的datanode节点信息		
+	8. 更新slaves文件,增加新的datanode节点信息		
 		
-	9.在web UI确定一下节点信息
-	
-- include和exclude优先级，include高于exclude
-	
-| Include | Exclude | Result | 
-| --- | --- | --- |
-| N | N | 不可连接 |
-| N | Y | 不可连接 |
-| Y | N | 可以连接 |
-| Y | Y | 可以连接,状态为退役状态 |
+	9. 在web UI确定一下节点信息
 	
 - 退役节点步骤
 
-	- 编辑/home/hadoop/hadoop-2.7.3/etc/hadoop/datatnodes.exclude.host文件
+	1. 编辑/home/hadoop/hadoop-2.7.3/etc/hadoop/datatnodes.exclude.host文件
 		
-	- 刷新namenode
+	2. 刷新namenode
 
 		$> hdfs dfsadmin -refreshNodes
 		
 		$> yarn rmadmin -refreshNodes
 		
-	- web UI确认退役节点状态为"Decommissioned"，停止datanode。
+	3. web UI确认退役节点状态为"Decommissioned"，停止datanode。
 	
 		$> hadoop-daemon.sh stop datanode
 		
-	- 在/home/hadoop/hadoop-2.7.3/etc/hadoop/datatnodes.include.host文件中移除退役的节点
+	4. 在/home/hadoop/hadoop-2.7.3/etc/hadoop/datatnodes.include.host文件中移除退役的节点
 	
-	- 再次执行namenode刷新命令
+	5. 再次执行namenode刷新命令
 	
 		$> hdfs dfsadmin -refreshNodes
 		
 		$> yarn rmadmin -refreshNodes
 		
-	- 从slaves文件中删除退役的节点
+	6. 从slaves文件中删除退役的节点
