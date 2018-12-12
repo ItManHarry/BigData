@@ -37,10 +37,10 @@
 
 # Hadoop机架感知
 
-	- 概念：	
+- 概念：	
 	机架感知是一种计算不同计算节点（TT）的距离的技术，用以在任务调度过程中尽量减少网络带宽资源的消耗，这里用尽量，想表达的是当一个TT申请不到本地化任务时，JT会尽量调度一个机架的任务给他，因为不同机架的网络带宽资源比同一个机架的网络带宽资源更可贵。当然，机架感知不仅仅用在MR中，同样还用在HDFS数据块备份过程中（第一个replica选择本节点【如果上传是DataNode】或者随机的一个DN（系统会尽量避免存储太满和太忙的节点），第二个节点选择于第一个节点不同机架的DN，第三个选择放在第二个DN同一个机架的另一个DN上）
 	
-	- 编写java代码
+- 编写java代码
 	
 ```java
 	package com.doosan.hadoop.switcher;
@@ -81,11 +81,11 @@
 		}
 	}
 ```
-	- eclipse打包jar
+- eclipse打包jar
 	
-	- 上传jar包至每个节点，上传路径：${hadoop_home}/share/hadoop/common/lib/
+- 上传jar包至每个节点，上传路径：${hadoop_home}/share/hadoop/common/lib/
 	
-	- 配置每台hadoop的core-site.xml文件
+- 配置每台hadoop的core-site.xml文件
 	
 ```xml
 	<property>
@@ -94,20 +94,21 @@
 	</property>
 ```
 
-	- 启动集群
+- 启动集群
 	
 		start-dfs.sh
 		start-yarn.sh
 		
-	- 验证：在任意一台机器上执行：hadoop dfsadmin -printTopology
+- 验证：在任意一台机器上执行：hadoop dfsadmin -printTopology
 	
 # Hadoop归档(archive)
 	
-	- 执行hadoop命令:
+- 执行hadoop命令:
 	
 ```
 	hadoop archive -archiveName files.har(file name) /my/files(files to be archived) /my(file archived save path)
 ```
+
 	har归档产生一个目录，目录名称就是xxx.har，该目录下有相关的文件。
 	
 	_index  //索引文件
@@ -121,26 +122,26 @@
 
 # 数据完整性
 
-	- 校验和
+- 校验和
 	
-		数据校验CRC-32(循环冗余校验)，任何大小的数据输入均计算得到一个32位的整数校验和。
+	数据校验CRC-32(循环冗余校验)，任何大小的数据输入均计算得到一个32位的整数校验和。
 
-		io.file.buffer.size	//指定多少字节校验一次
-		hdfs dfs -get -crc xxx //下载文件时，同时下载校验和文件
-		hdfs dfs -get -ignoreCrc xxx //下载文件时，不下载校验和文件
+	io.file.buffer.size	//指定多少字节校验一次
+	hdfs dfs -get -crc xxx //下载文件时，同时下载校验和文件
+	hdfs dfs -get -ignoreCrc xxx //下载文件时，不下载校验和文件
 	
 	datanode
 	
 	blk_xxxx			//块数据，没有元数据
 	blk_xxxx_xxx.meta	//校验和数据，4个字节对应512数据字节，7个字节的都信息
-	- 客户端关闭校验和
+- 客户端关闭校验和
 	FileSystem fs = ...;
 	fs.setVerifyChecksum(false);
 	fs.open(...);
 	
 # 文件压缩
 
-	- 减少存储空间，提高传输效率
+- 减少存储空间，提高传输效率
 	
 | 压缩格式 | 压缩工具 | 压缩算法 | 文件扩展名 | 是否可切割 |
 | --- | --- | --- | --- | --- |
@@ -151,7 +152,7 @@
 | LZ4 | 无 | LZ4 | .lz4 | 否 |
 | Snappy | 无 | Snappy | .Snappy | 否 |
 
-	- Codec
+- Codec
 
 | 压缩格式 | HadoopCompressionCodec |
 | --- | --- |
@@ -164,13 +165,14 @@
 
 # hadoop管理
 
-	- namenode名称节点的本地目录
-	
-		- edits 	//编辑日志
-		
-		- fsimage 	//镜像文件
+- namenode名称节点的本地目录
 
-	- 设置secondary namenode 设置成独立节点，修改配置文件hdfs-site.html
+	- edits 	//编辑日志
+	
+	- fsimage 	//镜像文件
+
+- 设置secondary namenode 设置成独立节点，修改配置文件hdfs-site.html
+
 	增加如下配置项目：
 	
 ```xml
@@ -190,16 +192,16 @@
 	</property>	
 ```
 
-	- namenode故障，恢复方式两种：
-	
-		- 复制2nn的数据导新的nn下
-		
-		- 使用-importCheckpoint选项启动namenode守护进程
-		
+- namenode故障，恢复方式两种：
 
-	- 配置管理,多目录设置(配置文件hdfs-core.xml)
+	- 复制2nn的数据导新的nn下
 	
-		- 单目录设置如下属性即可
+	- 使用-importCheckpoint选项启动namenode守护进程
+	
+
+- 配置管理,多目录设置(配置文件hdfs-core.xml)
+
+- 单目录设置如下属性即可
 	
 ```xml
 	<property>
@@ -208,7 +210,7 @@
 	</property>
 ```
 
-		- 配置多个目录(namenode)
+- 配置多个目录(namenode)
 	
 ```xml
 	<property>
@@ -218,7 +220,7 @@
 	</property>
 ```	
 
-		- 配置多个目录(datanode)
+- 配置多个目录(datanode)
 	
 ```xml
 	<property>
@@ -230,33 +232,33 @@
 	注：配置多目录的应用场景主要是磁盘扩容的时候，增加namendoe和datanode存放路径。
 
 	
-	- hadoop配额管理
+- hadoop配额管理
 	
-		- 配额分类
-		
-			- space quota 	//空间配额
-		
-			- dir quota		//目录配额
-		
-		- 设置命令(目录配额 )
-		
-			hdfs  dfsadmin -setQuota 2 /usr/...
-			
-		- 设置命令(空间配额 )
-		
-			hdfs  dfsadmin -setSpaceQuota 11 hadoop
-			
-	- 快照管理
+	- 配额分类
 	
-		-快速备份
+		- space quota 	//空间配额
+	
+		- dir quota		//目录配额
+	
+	- 设置命令(目录配额 )
+	
+		hdfs  dfsadmin -setQuota 2 /usr/...
 		
-		hdfs dfsadmin -allowSnapshot dir_name 		//启用指定目录快照
-		hdfs dfsadmin -disallowSnapshot dir_name 	//停用指定目录快照
-		hdfs dfs [-createSnapshot <snapshotDir> [snapshotName]] 	//创建快照
-		hdfs dfs [-deleteSnapshot <snapshotDir> [snapshotName]] 	//删除快照
-		hdfs lsSnapshottableDir						//列出所有可以快照的目录
+	- 设置命令(空间配额 )
+	
+		hdfs  dfsadmin -setSpaceQuota 11 hadoop
 		
-	- 块扫描器
+- 快照管理
+
+	-快速备份
+		
+	hdfs dfsadmin -allowSnapshot dir_name 		//启用指定目录快照
+	hdfs dfsadmin -disallowSnapshot dir_name 	//停用指定目录快照
+	hdfs dfs [-createSnapshot <snapshotDir> [snapshotName]] 	//创建快照
+	hdfs dfs [-deleteSnapshot <snapshotDir> [snapshotName]] 	//删除快照
+	hdfs lsSnapshottableDir						//列出所有可以快照的目录
+		
+- 块扫描器
 
 	数据节点每隔多少个小时扫描块数据，进行校验和计算[hdfs-site.xml]
 	
@@ -269,12 +271,11 @@
 	</property>
 ```		
 
-	- 启动均衡器
+- 启动均衡器
+
+	执行：start-balancer.sh		
 	
-		执行：start-balancer.sh
-		
-		
-	- 回收站[core-site.xml]
+- 回收站[core-site.xml]
 	
 	控制文件在trash中的存活时间(分钟数),服务端和客户端均可进行设置
 	
@@ -293,20 +294,20 @@
 	</property>
 ```
 
-	- 节点的上线和下线(Commission&Discommission)
+- 节点的上线和下线(Commission&Discommission)
+
+	- slaves文件仅在集群启动/停止操作才访问
 	
-		- slaves文件仅在集群启动/停止操作才访问
-		
-		- 在namenode节点新增datanodes.host文件,文件内容为各个datanode的hostname
-		
-			Server1
-			Server2
-			Server3
-			Server4
-			Server5
-			Server6
-		
-		- 配置文件hdfs-site.xml
+	- 在namenode节点新增datanodes.host文件,文件内容为各个datanode的hostname
+	
+		Server1
+		Server2
+		Server3
+		Server4
+		Server5
+		Server6
+	
+	- 配置文件hdfs-site.xml
 		
 ```xml
 	<!-- 决定数据节点能否连接到namenode	-->	
@@ -346,41 +347,40 @@
 	</property>
 ```
 
-	- 新增节点步骤
+- 新增节点步骤	
+	1.配置新datanode服务器的网络,关闭防火墙,SSH,JDK,Hadoop,hosts文件,hostname（参考hadoop-conf-final.md文件）
 	
-		1.配置新datanode服务器的网络,关闭防火墙,SSH,JDK,Hadoop,hosts文件,hostname（参考hadoop-conf-final.md文件）
+	2.配置完成后重启服务器		
+	
+	3.启动新的datanode和node manager
+	
+		- 启动datanode
 		
-		2.配置完成后重启服务器		
+		$> hadoop-daemon.sh start datanode
 		
-		3.启动新的datanode和node manager
+		$> yarn-daemon.sh start nodemanager
 		
-			- 启动datanode
-			
-			$> hadoop-daemon.sh start datanode
-			
-			$> yarn-daemon.sh start nodemanager
-			
-			- 再平衡
-			
-			$> ./bin/start-balancer.sh
-			
-		4.修改namenode的hosts文件,增加新的datanode节点信息,配置完成后分发至各个服务器;配置SSH免密登录新datanode节点		
+		- 再平衡
 		
-		5.更新/home/hadoop/hadoop-2.7.3/etc/hadoop/datatnodes.include.host文件，增加新节点
+		$> ./bin/start-balancer.sh
 		
-		6.更新namenode,执行如下命令：
+	4.修改namenode的hosts文件,增加新的datanode节点信息,配置完成后分发至各个服务器;配置SSH免密登录新datanode节点		
+	
+	5.更新/home/hadoop/hadoop-2.7.3/etc/hadoop/datatnodes.include.host文件，增加新节点
+	
+	6.更新namenode,执行如下命令：
+	
+		$> hdfs dfsadmin -refreshNodes
 		
-			$> hdfs dfsadmin -refreshNodes
-			
-		7.更新resource manager,执行命令：
+	7.更新resource manager,执行命令：
+	
+		$> yarn rmadmin -refreshNodes
+	
+	8.更新slaves文件,增加新的datanode节点信息		
 		
-			$> yarn rmadmin -refreshNodes
-		
-		8.更新slaves文件,增加新的datanode节点信息		
-			
-		9.在web UI确定一下节点信息
-		
-	- include和exclude优先级，include高于exclude
+	9.在web UI确定一下节点信息
+	
+- include和exclude优先级，include高于exclude
 	
 | Include | Exclude | Result | 
 | --- | --- | --- |
@@ -389,26 +389,26 @@
 | Y | N | 可以连接 |
 | Y | Y | 可以连接,状态为退役状态 |
 	
-	- 退役节点步骤
+- 退役节点步骤
+
+	- 编辑/home/hadoop/hadoop-2.7.3/etc/hadoop/datatnodes.exclude.host文件
+		
+	- 刷新namenode
+
+		$> hdfs dfsadmin -refreshNodes
+		
+		$> yarn rmadmin -refreshNodes
+		
+	- web UI确认退役节点状态为"Decommissioned"，停止datanode。
 	
-		- 编辑/home/hadoop/hadoop-2.7.3/etc/hadoop/datatnodes.exclude.host文件
-			
-		- 刷新namenode
+		$> hadoop-daemon.sh stop datanode
+		
+	- 在/home/hadoop/hadoop-2.7.3/etc/hadoop/datatnodes.include.host文件中移除退役的节点
 	
-			$> hdfs dfsadmin -refreshNodes
-			
-			$> yarn rmadmin -refreshNodes
-			
-		- web UI确认退役节点状态为"Decommissioned"，停止datanode。
+	- 再次执行namenode刷新命令
+	
+		$> hdfs dfsadmin -refreshNodes
 		
-			$> hadoop-daemon.sh stop datanode
-			
-		- 在/home/hadoop/hadoop-2.7.3/etc/hadoop/datatnodes.include.host文件中移除退役的节点
+		$> yarn rmadmin -refreshNodes
 		
-		- 再次执行namenode刷新命令
-		
-			$> hdfs dfsadmin -refreshNodes
-			
-			$> yarn rmadmin -refreshNodes
-			
-		- 从slaves文件中删除退役的节点
+	- 从slaves文件中删除退役的节点
