@@ -313,7 +313,7 @@
 	<property>
 	  <name>dfs.hosts</name>
 	  <!-- 指定一个文件的完整路径，如果没有指定，说明所有的节点均可以连接到namenode	  -->
-	  <value>/home/hadoop/hadoop-2.7.3/data/datatnodes.host</value>
+	  <value>/home/hadoop/hadoop-2.7.3/etc/hadoop/datatnodes.include.host</value>
 	  <description>Names a file that contains a list of hosts that are
 	  permitted to connect to the namenode. The full pathname of the file
 	  must be specified.  If the value is empty, all hosts are
@@ -326,14 +326,14 @@
 ```xml
 	<property>    
 		<name>yarn.resourcemanager.nodes.include-path</name>
-		<value>/home/hadoop/hadoop-2.7.3/data/datatnodes.host</value>
+		<value>/home/hadoop/hadoop-2.7.3/etc/hadoop/datatnodes.include.host</value>
 		<description>Path to file with nodes to include.</description>
 	</property>
 ```
 
 	- 新增节点步骤
 	
-		1.配置hdfs-site.xml的dfs.hosts属性(/home/hadoop/hadoop-2.7.3/data/datatnodes.host)
+		1.配置hdfs-site.xml的dfs.hosts属性(/home/hadoop/hadoop-2.7.3/etc/hadoop/datatnodes.include.host)
 	
 		2.配置新datanode服务器的网络,关闭防火墙,SSH,JDK,Hadoop,hosts文件,hostname
 		
@@ -352,6 +352,70 @@
 
 		8.启动新的datanode和node manager
 		
+			- 启动datanode
+			
 			$> hadoop-daemon.sh start datanode
 			
+			- 再平衡
+			
+			$> ./bin/start-balancer.sh
+			
 		9.在web UI确定一下节点信息
+		
+	- include和exclude优先级，include高于exclude
+	
+| Include | Exclude | Result | 
+| --- | --- | --- |
+| N | N | 不可连接 |
+| N | Y | 不可连接 |
+| Y | N | 可以连接 |
+| Y | Y | 可以连接,状态为退役状态 |
+	
+	- 退役节点步骤
+	
+		- 编辑/home/hadoop/hadoop-2.7.3/etc/hadoop/datatnodes.exclude.host文件
+		
+		- 配置文件hdfs-site.xml
+		
+```xml
+	<!-- 决定数据节点能否连接到namenode	-->	
+	<property>
+	  <name>dfs.hosts.exclude</name>
+	  <!-- 指定一个文件的完整路径，如果没有指定，说明所有的节点均可以连接到namenode	  -->
+	  <value>/home/hadoop/hadoop-2.7.3/etc/hadoop/datatnodes.exclude.host</value>
+	  <description>Names a file that contains a list of hosts that are
+	  permitted to connect to the namenode. The full pathname of the file
+	  must be specified.  If the value is empty, all hosts are
+	  permitted.</description>
+	</property>
+```
+
+	- 配置文件yarn-site.xml
+		
+```xml
+	<property>    
+		<name>yarn.resourcemanager.nodes.exclude-path</name>
+		<value>/home/hadoop/hadoop-2.7.3/etc/hadoop/datatnodes.exclude.host</value>
+		<description>Path to file with nodes to include.</description>
+	</property>
+```
+		
+	- 刷新namenode
+	
+		$> hdfs dfsadmin -refreshNodes
+		
+		$> yarn rmadmin -refreshNodes
+		
+	- web UI确认退役节点状态为"Decommissioned"，停止datanode。
+	
+		$> hadoop-daemon.sh stop datanode
+		
+	- 在/home/hadoop/hadoop-2.7.3/etc/hadoop/datatnodes.include.host文件中移除推荐的节点
+	
+	- 再次执行namenode刷新命令
+	
+		$> hdfs dfsadmin -refreshNodes
+		
+		$> yarn rmadmin -refreshNodes
+		
+	- 从slaves文件中删除退役的节点
