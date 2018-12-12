@@ -292,6 +292,66 @@
 	  </description>
 	</property>
 ```
+
+	- 节点的上线和下线(Commission&Discommission)
 	
+		- slaves文件仅在集群启动/停止操作才访问
+		
+		- 在namenode节点新增datanodes.host文件,文件内容为各个datanode的hostname
+		
+			Server1
+			Server2
+			Server3
+			Server4
+			Server5
+			Server6
+		
+		- 配置文件hdfs-site.xml
+		
+```xml
+	<!-- 决定数据节点能否连接到namenode	-->	
+	<property>
+	  <name>dfs.hosts</name>
+	  <!-- 指定一个文件的完整路径，如果没有指定，说明所有的节点均可以连接到namenode	  -->
+	  <value>/home/hadoop/hadoop-2.7.3/data/datatnodes.host</value>
+	  <description>Names a file that contains a list of hosts that are
+	  permitted to connect to the namenode. The full pathname of the file
+	  must be specified.  If the value is empty, all hosts are
+	  permitted.</description>
+	</property>
+```
+
+	- 配置文件yarn-site.xml
+		
+```xml
+	<property>    
+		<name>yarn.resourcemanager.nodes.include-path</name>
+		<value>/home/hadoop/hadoop-2.7.3/data/datatnodes.host</value>
+		<description>Path to file with nodes to include.</description>
+	</property>
+```
+
+	- 新增节点步骤
 	
+		1.配置hdfs-site.xml的dfs.hosts属性(/home/hadoop/hadoop-2.7.3/data/datatnodes.host)
 	
+		2.配置新datanode服务器的网络,关闭防火墙,SSH,JDK,Hadoop,hosts文件,hostname
+		
+		3.配置完成后重启服务器		
+		4.修改namenode的hosts文件,增加新的datanode节点信息,配置完成后分发至各个服务器;配置SSH免密登录新datanode节点
+		
+		5.更新namenode,执行如下命令：
+		
+			$> hdfs dfsadmin -refreshNodes
+			
+		6.更新resource manager,执行命令：
+		
+			$> yarn rmadmin -refreshNodes
+		
+		7.更新slaves文件,增加新的datanode节点信息
+
+		8.启动新的datanode和node manager
+		
+			$> hadoop-daemon.sh start datanode
+			
+		9.在web UI确定一下节点信息
