@@ -15,7 +15,160 @@
 	- partition(分区)
 	
 	- bucket(桶hash)
-
-
 	
+- 特性
+
+	- schema存储在数据库中,处理hdfs的数据。
 	
+	- OLAP
+	
+	- 查询语言 HiveQL(HQL)
+	
+	- 可伸缩、可扩展、速度快。
+	
+- 架构
+
+	- client ： webui | CLI | ...
+	
+	- hive	 : 	meta store + Hive引擎（处理引擎、执行引擎）
+	
+	- 底层	 ： hadoop（hdfs + MapReduce）
+	
+- 组件
+
+	- metadata，存储在rdbms中（原数据：table + database + ）
+
+	- HQL处理引擎
+	
+		写查询语句用于MapReduce作业
+		
+	- HQL执行引擎
+	
+		执行查询工作，得到查询结果。
+		
+	- HDFS/Hbase
+	
+		存储数据
+		
+- Hive安装
+
+	- 下载地址：http://archive.apache.org/dist/hive/hive-2.1.1/
+	
+	- 解压：
+	
+```
+		tar -xzvf apache-hive-2.1.1-bin.tar.gz
+```
+
+	- 配置环境变量
+	
+```
+		vi /etc/profile
+		export HIVE_HOME=/home/hadoop/hive2.1.1/bin
+		source /etc/profile
+```
+	
+	- 启动hive
+	
+		$> hive
+		
+
+- Hive配置
+
+	- 复制$HIVE_HOME/conf下的hive-env.sh.template到hive-env.sh，导入hadoop环境变量即可
+
+```
+		$> cp hive-env.sh.template hive-env.sh
+		$> vi hive-env.sh
+		HADOOP_HOME=/home/hadoop/hadoop-2.7.3
+```
+
+	- 配置hive-site.xml
+	
+```
+		$> cp hive-default.xml.template hive-site.xml
+		$> vi hive-site.xml		
+```	
+
+	- 初始化元数据库,初始化完成后生成metastore_db文件夹，路径和执行命令的路径一致，后续执行
+	hive指令也在当前目录下。
+	
+```
+		$> bin/schematool -initSchema -dbType derby		
+```
+	
+	- 处理hive启动报错
+	
+		- 报错信息：
+	
+```
+	Logging initialized using configuration in jar:file:/home/hadoop/hive2.1.1/lib/hive-common-2.1.1.jar!/hive-log4j2.properties Async: true
+	Exception in thread "main" java.lang.IllegalArgumentException: java.net.URISyntaxException: Relative path in absolute URI: ${system:java.io.tmpdir%7D/$%7Bsystem:user.name%7D
+			at org.apache.hadoop.fs.Path.initialize(Path.java:205)
+			at org.apache.hadoop.fs.Path.<init>(Path.java:171)
+			at org.apache.hadoop.hive.ql.session.SessionState.createSessionDirs(SessionState.java:644)
+			at org.apache.hadoop.hive.ql.session.SessionState.start(SessionState.java:563)
+			at org.apache.hadoop.hive.ql.session.SessionState.beginStart(SessionState.java:531)
+			at org.apache.hadoop.hive.cli.CliDriver.run(CliDriver.java:705)
+			at org.apache.hadoop.hive.cli.CliDriver.main(CliDriver.java:641)
+			at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+			at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+			at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+			at java.lang.reflect.Method.invoke(Method.java:497)
+			at org.apache.hadoop.util.RunJar.run(RunJar.java:221)
+			at org.apache.hadoop.util.RunJar.main(RunJar.java:136)
+	Caused by: java.net.URISyntaxException: Relative path in absolute URI: ${system:java.io.tmpdir%7D/$%7Bsystem:user.name%7D
+			at java.net.URI.checkPath(URI.java:1823)
+			at java.net.URI.<init>(URI.java:745)
+			at org.apache.hadoop.fs.Path.initialize(Path.java:202)
+```
+	
+	- 处理方法，编辑hive-site.xml文件，修改所有的${system:java.io.tmpdir}和${system:user.name}的值
+	
+```xml
+	<property>
+		<name>hive.exec.local.scratchdir</name>
+		<!-- value>${system:java.io.tmpdir}/${system:user.name}</value -->
+		<value>/home/hadoop/jdk1.8.0_65/tmp/hadoop</value>
+		<description>Local scratch space for Hive jobs</description>
+	</property>
+```
+
+	- 启动成功后，进入hive命令提示符下，使用exit命令退出
+	
+```
+		hive> exit;
+```	
+	
+	- 将元数据存放到MySQL数据中 ， 修改hive-site.xml文件的配置
+	
+```xml
+	  <property>
+		<name>javax.jdo.option.ConnectionURL</name>
+		<value>jdbc:derby:;databaseName=metastore_db;create=true</value>
+		<description>
+		  JDBC connect string for a JDBC metastore.
+		  To use SSL to encrypt/authenticate the connection, provide database-specific SSL flag in the connection URL.
+		  For example, jdbc:postgresql://myhost/db?ssl=true for postgres database.
+		</description>
+	  </property>
+	  <property>
+		<name>javax.jdo.option.ConnectionDriverName</name>
+		<value>org.apache.derby.jdbc.EmbeddedDriver</value>
+		<description>Driver class name for a JDBC metastore</description>
+	  </property>
+	  <property>
+		<name>javax.jdo.option.ConnectionUserName</name>
+		<value>APP</value>
+		<description>Username to use against metastore database</description>
+	  </property>
+	  <property>
+		<name>javax.jdo.option.ConnectionPassword</name>
+		<value>mine</value>
+		<description>password to use against metastore database</description>
+	  </property>
+```
+
+	- 将MySQL驱动包加到$HIVE_HOME/lib下
+	
+	- 删除metastore_db文件夹，重新格式化hive
