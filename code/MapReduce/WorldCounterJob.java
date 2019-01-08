@@ -9,11 +9,11 @@ import com.sun.jersey.core.impl.provider.entity.XMLJAXBElementProvider.Text;
 /**
  * MapReduce - run
  */
-public class TemperatureRun {
+public class WorldCounterJob {
 
 	public static void main(String[] args) throws Exception{
 		if(args.length != 2){
-			System.err.println("Usage:MaxTemperature <input path> <out path>");
+			System.err.println("Usage:World Counter <input path> <out path>");
 			System.exit(-1);
 		}
 		//创建配置对象
@@ -21,17 +21,17 @@ public class TemperatureRun {
 		//创建作业对象
 		Job job = Job.getInstance(conf);
 		//设置jar搜索类
-		job.setJarByClass(TemperatureRun.class);
+		job.setJarByClass(WorldCounterJob.class);
 		//设置作业名称
-		job.setJobName("Max Temperature...");
+		job.setJobName("World Counter...");
 		//添加输入路径
 		FileInputFormat.addInputPath(job, new Path(args[0]));
 		//设置输出路径
 		FileOutputFormat.setOutputPath(job, new Path(args[1]));
 		//设置Mapper类
-		job.setMapperClass(TemperatureMapper.class);
+		job.setMapperClass(WorldCounterMapper.class);
 		//设置Reduce类
-		job.setReducerClass(TemperatureReduce.class);
+		job.setReducerClass(WorldCounterReduce.class);
 		//设置输出key类型
 		job.setOutputKeyClass(Text.class);
 		//设置输出value类型
