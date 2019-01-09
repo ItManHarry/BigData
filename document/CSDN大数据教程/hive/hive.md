@@ -145,7 +145,7 @@
 ```xml
 	  <property>
 		<name>javax.jdo.option.ConnectionURL</name>
-		<value>jdbc:derby:;databaseName=metastore_db;create=true</value>
+		<value>jdbc:mysql://10.40.34.64:3306/hive</value>
 		<description>
 		  JDBC connect string for a JDBC metastore.
 		  To use SSL to encrypt/authenticate the connection, provide database-specific SSL flag in the connection URL.
@@ -154,17 +154,17 @@
 	  </property>
 	  <property>
 		<name>javax.jdo.option.ConnectionDriverName</name>
-		<value>org.apache.derby.jdbc.EmbeddedDriver</value>
+		<value>com.mysql.jdbc.Driver</value>
 		<description>Driver class name for a JDBC metastore</description>
 	  </property>
 	  <property>
 		<name>javax.jdo.option.ConnectionUserName</name>
-		<value>APP</value>
+		<value>hive</value>
 		<description>Username to use against metastore database</description>
 	  </property>
 	  <property>
 		<name>javax.jdo.option.ConnectionPassword</name>
-		<value>mine</value>
+		<value>hive</value>
 		<description>password to use against metastore database</description>
 	  </property>
 ```
@@ -172,3 +172,22 @@
 	- 将MySQL驱动包加到$HIVE_HOME/lib下
 	
 	- 删除metastore_db文件夹，重新格式化hive
+	
+```
+		$> bin/schematool -initSchema -dbType mysql
+```
+	注：mysql格式化后，不会生成metastore_db文件夹
+
+# Hive数据类型
+
+- Integral
+	
+		- TINYINT
+		
+		- SMALLINT
+		
+		- INT
+		
+		- BIGINT
+		
+- String
