@@ -54,7 +54,7 @@
 
 	- 下载地址：http://archive.apache.org/dist/hive/hive-2.1.1/
 	
-	- 解压：
+	- 解压(在hadoop的namenode节点解压安装)：
 	
 ```
 		tar -xzvf apache-hive-2.1.1-bin.tar.gz
@@ -182,12 +182,106 @@
 
 - Integral
 	
-		- TINYINT
+		- TINYINT  		byte		1
 		
-		- SMALLINT
+		- SMALLINT		short		2
+				
+		- INT			int			4
 		
-		- INT
-		
-		- BIGINT
+		- BIGINT		long		8
 		
 - String
+
+	''、""都可以。
+	VARCHAR 0 - 65535
+	CHAR 	255
+	
+- Timestamp 精确到纳秒
+
+	格式："YYYY-MM-DD HH:MM:SS.fffffffff"
+		  "yyyy-mm-dd hh:mm:ss.fffffffff"
+
+- date	
+	
+	格式："YYYY-MM-DD"
+	
+- Decimals - 常量
+	
+	格式：	DECIMAL(scale, precision)  
+	例：decimal(10, 0) - 总长度10位，小数0位
+	
+- union type
+
+	格式：UNIONTYPE<int, double, array<string>, struct<a:int, b:string>>
+	例：{0:1}
+		{1:2.0}
+		{2:["three","four"]}
+		{3:{"a":5,"b":"five"}}
+		{2:["six","seven"]}
+		{3:{"a":8,"b":"eight"}}
+		{0:9}
+		{1:10.0}
+		
+- Floating point types
+
+- Decimal type
+
+- Null type
+
+- Complex types 
+
+	- Arrays
+		
+		Array<data_type>
+	
+	- Maps
+	
+		Map<primitive_type, data_type>
+	
+	- Structs
+	
+		struct<col_name:data_type[comment col_comment],...>
+		
+		
+- 创建Hive数据库(注：语法和mysql基本一致)
+
+	mysql存放hive元数据（表结构信息、库信息、列信息......）
+	
+	1. 登录hive shell
+	
+		$> hive
+		
+	2.创建数据库 
+	
+		hive> create database myhive;
+		hive> show databases;	
+		
+	hadoop:数据库创建完成后，hadoop生成myhive.db文件，文件路径：/user/hive/warehouse
+	mysql:存储表dbs
+			
+		select * from dbs;
+		
+	3.删除数据
+	
+		hive> drop database myhive;
+		
+	4.创建表
+	
+		hive> create table user(id int , name varchar(20), age int);
+		
+	完整语法：
+		
+		create table if not exists employee (eid int, name String, salary String, destination String)
+		comment 'Employee details'
+		row format delimited
+		fields terminated by '\t'
+		lines terminated by '\t'
+		stored as textfile;
+		
+	mysql:存储表tbls
+	
+		select * from tbls;
+		
+	5.删除表
+	
+		hive> drop table default.user;
