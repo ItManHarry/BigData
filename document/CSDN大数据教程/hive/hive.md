@@ -269,19 +269,40 @@
 	
 		hive> create table user(id int , name varchar(20), age int);
 		
+		4.1 hive执行SQL语句
+
+		$> hive -e "create table dbname.tablename(...)"
+		
+		4.2 hive执行脚本
+		
+			a. 创建脚本文件 [h.sql]
+			
+			b. 执行脚本
+			
+				$> hive -f h.sql
+		
 	完整语法：
 		
 		create table if not exists employee (eid int, name String, salary String, destination String)
 		comment 'Employee details'
 		row format delimited
 		fields terminated by '\t'
-		lines terminated by '\t'
+		lines terminated by '\n'
 		stored as textfile;
 		
 	mysql:存储表tbls
 	
 		select * from tbls;
 		
-	5.删除表
+	5.查看表结构
+	
+		hive> desc tablename
+		
+		
+	6.删除表
 	
 		hive> drop table default.user;
+		
+
+
+	
