@@ -243,7 +243,7 @@
 		struct<col_name:data_type[comment col_comment],...>
 		
 		
-- 创建Hive数据库(注：语法和mysql基本一致)
+- Hive数据库操作(注：语法和mysql基本一致)
 
 	mysql存放hive元数据（表结构信息、库信息、列信息......）
 	
@@ -253,7 +253,7 @@
 		
 	2.创建数据库 
 	
-		hive> create database myhive;
+		hive> create database myhive [location] 'HDFS FILE PATH[hdfs://10.40.123.210:900/hive/wh/dbname]';	//通过location自定义库文件路径,路径使用hdfs URL格式
 		hive> show databases;	
 		
 	hadoop:数据库创建完成后，hadoop生成myhive.db文件，文件路径：/user/hive/warehouse
@@ -294,6 +294,8 @@
 	
 		select * from tbls;
 		
+	mysql:存储列信息columns_v2
+		
 	5.查看表结构
 	
 		hive> desc tablename
@@ -303,6 +305,46 @@
 	
 		hive> drop table default.user;
 		
-
-
+	7.本地数据导入
 	
+		语法：LOAD DATA [LOCAL] INPATH 'filepath' [OVERWRITE] INTO TABLE tablename [PARTITION (partclos1= val1, partclos2=val2 ...)]
+		
+		例：hive> load data local inpath 'filepath' [overwrite] into table dbname.tablename;
+		overwrite一般不使用，否则会覆盖表下所有的数据。
+	
+		local		//本地文件
+		overwrite 	//覆盖表数据
+		partition 	//分区表
+		
+		
+	8.修改表结构
+	
+		8.1 修改表名：alter table old_name rename new_name
+		
+		8.2 新增列：alter table t1 add columns(col_name1 col_type1,col_name2 col_type2 ...)
+		
+		8.3 修改列: alter table t1 change col_name new_name new_type
+		
+		8.4 删除列：alter table t1 drop [column] col_name
+		
+		
+		8.5 替换列：alter table t1 replace columns(col_spec[,col_spec ...])
+		
+- Hive执行命令
+
+		$> hive -e "select * form myhive.employee"		//一次性执行命令
+		
+		$> hive -S -e "select * from myhive.employee"	//一次性静态执行
+		
+		$> hive -f "*.sql"								//执行SQL脚本
+		
+		$> hive --help									//查看帮助
+		
+		hive>! cmd xxx;									//hive下执行简单的shell命令
+		
+		hive> set hive.cli.print.header=true;			//动态设置属性 
+		
+		hive> show databases 'my*';						//通配符"*"
+	
+		
+		
