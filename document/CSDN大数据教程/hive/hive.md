@@ -346,5 +346,56 @@
 		
 		hive> show databases 'my*';						//通配符"*"
 	
+# Hive架构
+
+- client ： webui CLI
+
+- Hive(Process Engine --> Excute Engine)
+
+- Hadoop(hdfs)
+
+# 管理表
+
+- 创建表，指定注释+表属性
+
+```
+	create table if not exists t3(id int comment 'id is identity')
+	comment 'table sample'
+	tblproperties('creator'='centos','createtime'='2019-1-28')
+```	
+
+- desc extended tablename ;//显示表扩展信息
+
+- desc formated tablename ;//格式化显示表信息
+
+
+- 托管表（内部表）  ：
+	
+	语法：create mananged table ... 	//删除元数据，表数据一并删除掉了-
+	
+- 外部表			：
+
+	语法：create external table ...		//删除元数据，表数据不会被删除
+	
+- 分区表			：
+
+	语法：
+		$hive> create table tn (id int, name string) partitioned by (province string, city string);
 		
+	添加分区：
+	
+		$hive> alter table tn add partition(province='ShanDong',city='JiNing') [location '...'];
+
+	查看分区信息：
+	
+		$hive > show partitions tn;
 		
+	对应元数据表MySQL：partitions
+	
+	应用案例：日志；数据细化，表下面再次分区（Hive优化查询的主要手段之一）
+	
+	分区表插入数据：
+	
+	语法：$hive> INSERT INTO TABLENAME [PARTITION(PART1=VAL1,PART2=VAL2...)] VALUES(VALUES_ROW...)
+	
+	$hive> insert into tn partition(province='SD',city='JN') values(1, 'Harry');
