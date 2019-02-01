@@ -390,6 +390,10 @@
 	
 		$hive > show partitions tn;
 		
+	删除分区：
+	
+		$hive> alter table tn drop partition(province='ShanDong',city='JiNing');
+		
 	对应元数据表MySQL：partitions
 	
 	应用案例：日志；数据细化，表下面再次分区（Hive优化查询的主要手段之一）
@@ -399,3 +403,17 @@
 	语法：$hive> INSERT INTO TABLENAME [PARTITION(PART1=VAL1,PART2=VAL2...)] VALUES(VALUES_ROW...)
 	
 	$hive> insert into tn partition(province='SD',city='JN') values(1, 'Harry');
+
+	创建表，携带数据（可做备份表使用）
+	
+	$hive> create table user1 as select * from user;
+	
+	创建表，不携带数据（复制表）
+	
+	$hive> create table user1 like select * from user;
+	
+	
+	动态创建分区：
+	
+	
+	
