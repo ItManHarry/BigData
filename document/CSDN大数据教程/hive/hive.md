@@ -410,10 +410,22 @@
 	
 	创建表，不携带数据（复制表）
 	
-	$hive> create table user1 like select * from user;
+	$hive> create table user1 like user;
 	
 	
 	动态创建分区：
 	
+	1. 创建分区表
 	
+		create table if not exists t4 (id int ,name string, age int) partitioned by (province string, city string);
+		
+	2.关闭严格分区模式
 	
+		设置配置文件hive-site.xml中的"hive.exec.dynamic.partition.mode"的值为"nostrict"
+		
+	3.执行插入数据动态增加分区
+	
+		$hive> insert into t4 partition(province, city) select id ,name, age , province, city from t1;
+		
+# 远程连接hive
+
