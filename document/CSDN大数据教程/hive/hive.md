@@ -429,3 +429,10 @@
 		
 # 远程连接hive
 
+	- cli : 基于Apache thrift
+	
+		启动 : $>hive --service cli 和 $>hive 等效
+	
+	- beeline : 基于jdbc
+
+		启动 : $>hive --service hiveserver2
