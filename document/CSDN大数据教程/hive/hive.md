@@ -436,3 +436,63 @@
 	- beeline : 基于jdbc
 
 		启动 : $>hive --service hiveserver2
+		
+# hive beeline客户端使用
+
+- 关闭hiveserver2认证
+
+	修改hive/conf/hive-site.xml
+
+```	
+	<property>
+		<name>hive.server2.enable.doAs</name>
+		<value>false</value>
+	</property>
+```
+
+- 启动hiveserver2服务器
+
+```
+	$>hive --service hiveserver2
+```
+
+- 启动beeline客户端，直接连接到hiverserver2，端口：10000
+
+```
+	$beeline -u jdbc:hive2://localhost:10000/myhive[数据库名称]
+```
+
+- 进入beeline cli
+
+```
+	$beeline> 
+	$beeline> !help		//查看帮助
+	$beeline> !close	//关闭当前连接
+	$beeline> !connect jdbc:hive2://localhost:10000/myhive
+	$beeline> tables 		//显示表
+	$beeline> show tables 	//显示表
+```
+
+- 使用eclipse操作hive
+
+	1.创建java工程
+	
+	2.引入jar包
+	
+	3.编写客户端代码
+	
+```java
+	import java.sql.Connection;
+	import java.sql.DriverManager;
+	import java.sql.Statement;
+	public class App{
+		public static void main(String[] args) throws Exception{
+			Class.forName("org.apache.hive.jdbc.HiveDriver");
+			Connection conn = DriverManager.getConnection("jdbc:hive2://10.40.120.210:10000/myhive");
+			Statement st = conn.createStatement();
+			st.execute("drop table t4");
+			st.close();
+			System.out.println("OK");
+		}
+	}
+```
