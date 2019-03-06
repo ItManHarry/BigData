@@ -485,12 +485,27 @@
 	import java.sql.Connection;
 	import java.sql.DriverManager;
 	import java.sql.Statement;
+	import java.sql.ResultSet;
 	public class App{
 		public static void main(String[] args) throws Exception{
 			Class.forName("org.apache.hive.jdbc.HiveDriver");
 			Connection conn = DriverManager.getConnection("jdbc:hive2://10.40.120.210:10000/myhive");
 			Statement st = conn.createStatement();
 			st.execute("drop table t4");
+			st.close();
+			System.out.println("OK");
+		}
+		@Test
+		public void testQuery() throws Exception{
+			Class.forName("org.apache.hive.jdbc.HiveDriver");
+			Connection conn = DriverManager.getConnection("jdbc:hive2://10.40.120.210:10000/myhive");
+			Statement st = conn.createStatement();
+			ResultSet rs = st.executeQuery("select * from t1");
+			while(rs.next()){
+				int age = rs.getInt("age");
+				System.out.println("Age is : " + age);
+			}
+			rs.close();
 			st.close();
 			System.out.println("OK");
 		}
