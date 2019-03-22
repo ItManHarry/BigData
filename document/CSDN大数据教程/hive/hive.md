@@ -511,3 +511,22 @@
 		}
 	}
 ```
+
+# Hive Bucket
+
+- 创建语法
+
+	create table bucket_tb(
+		name string,
+		employee_id int,
+		work_place array<String>,
+		sex_age strutct<sex:string, age:int>,
+		skills_score map<string, int>,
+		depart_title map<String , array<string>>
+	)
+	clustered by (employee_id) into 2 buckets
+	row format delimited
+	fields terminated by '|'
+	lines terminated by '\n'
+	collection items terminated by ','
+	map keys terminated by ':'
