@@ -92,5 +92,13 @@
 					<name>hbase.cluster.distributed</name>					
 					<value>true</value>
 				</property>
+				<property>
+					<name>hbase.rootdir</name>					
+					<value></value>
+				</property>
+				<property>
+					<name>hbase.zookeeper.property.dataDir</name>					
+					<value>/home/hadoop/hbase/zk</value>
+				</property>
 			```
 		3.完全分布式
