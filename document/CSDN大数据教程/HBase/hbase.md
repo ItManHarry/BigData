@@ -29,22 +29,22 @@
 
 	- 解压hbase
 	
-	```
-		tar -zvxf hbase-1.2.4-bin.tar.gz
-	```
+```
+	tar -zvxf hbase-1.2.4-bin.tar.gz
+```
 	
 	- 设置环境变量
-	
-	```
-		HBASE_HOME=...
-		PATH=$PATH:$HBASE_HOME/bin
-	```
+
+```
+	HBASE_HOME=...
+	PATH=$PATH:$HBASE_HOME/bin
+```
 	
 	- 验证
 	
-	```
-			$> hbase version
-	```
+```
+	$> hbase version
+```
 	
 	-配置
 	
@@ -60,12 +60,12 @@
 			
 			属性：hbase.rootdir=/home/hadoop/hbase
 			
-			```
-				<property>
-					<name>hbase.rootdir</name>					
-					<value>file:////home/hadoop/hbase</value>
-				</property>
-			```
+```
+	<property>
+		<name>hbase.rootdir</name>					
+		<value>file:////home/hadoop/hbase</value>
+	</property>
+```
 			
 			c.配置zk本地数据存放目录
 			
@@ -75,30 +75,30 @@
 			
 			属性：hbase.zookeeper.property.dataDir=/home/hadoop/hbase/zk
 			
-			```
-				<property>
-					<name>hbase.zookeeper.property.dataDir</name>					
-					<value>/home/hadoop/hbase/zk</value>
-				</property>
-			```
+```
+	<property>
+		<name>hbase.zookeeper.property.dataDir</name>					
+		<value>/home/hadoop/hbase/zk</value>
+	</property>
+```
 			
 		2.伪分布式
 		
 			a.配置hbase-1.2.4/conf/hbase-site.xml
 			
 			
-			```
-				<property>
-					<name>hbase.cluster.distributed</name>					
-					<value>true</value>
-				</property>
-				<property>
-					<name>hbase.rootdir</name>					
-					<value></value>
-				</property>
-				<property>
-					<name>hbase.zookeeper.property.dataDir</name>					
-					<value>/home/hadoop/hbase/zk</value>
-				</property>
-			```
+```
+	<property>
+		<name>hbase.cluster.distributed</name>					
+		<value>true</value>
+	</property>
+	<property>
+		<name>hbase.rootdir</name>					
+		<value>hdfs://Server0:8020/hbase</value>
+	</property>
+	<property>
+		<name>hbase.zookeeper.property.dataDir</name>					
+		<value>/home/hadoop/hbase-1.2.4/zk</value>
+	</property>
+```
 		3.完全分布式
