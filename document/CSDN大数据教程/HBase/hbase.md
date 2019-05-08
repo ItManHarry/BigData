@@ -84,8 +84,7 @@
 			
 		2.伪分布式
 		
-			a.配置hbase-1.2.4/conf/hbase-site.xml
-			
+			a.配置hbase-1.2.4/conf/hbase-site.xml			
 			
 ```
 	<property>
@@ -93,8 +92,9 @@
 		<value>true</value>
 	</property>
 	<property>
-		<name>hbase.rootdir</name>					
-		<value>hdfs://Server0:8020/hbase</value>
+		<name>hbase.rootdir</name>
+		<!-- 地址是hdfs url, hbase为文件夹名称 -->		
+		<value>hdfs://Server0:9000/hbase</value>
 	</property>
 	<property>
 		<name>hbase.zookeeper.property.dataDir</name>					
@@ -102,3 +102,97 @@
 	</property>
 ```
 		3.完全分布式
+		
+		a.配置regionservers
+		
+		路径：HBASE_HOEM/conf/regionservers
+		
+		Server1
+		Server2
+		Server3
+		Server4
+		
+		b.分发hbase安装目录到各个server
+		
+		c.分配/etc/profile
+		
+		d.主服务器启动hbase
+		
+			start-hbase.sh
+		
+		e.web访问
+		
+		URL:http://10.40.123.210:16010/
+		
+## zookeeper
+
+- 协同服务
+
+- HA配置
+
+- 分布式
+
+- SPOF			//单点故障
+
+- 存储结构	 	//属性结构，Linux操作系统。/version控制
+
+- 轻量级集群	//一个服务器只有1M的存储量
+
+- 节点类型		//persistence | sequential | ephemeral
+
+- leader机制	//最小值选举法
+
+- NIO			//底层技术：ChannelSocket + ByteBuffer
+
+# hbase使用外部zookeeper
+
+- 设置HBASE_HOME/conf/hbase-env.sh配置文件
+
+```
+	HBASE_MANAGES_ZK=false
+```
+
+- 配置HBASE_HOME/conf/hbase-site.xml增加以下配置项，设置外部zookeeper
+
+```
+	<property>
+		<name>hbase.zookeeper.quorum</name>
+		<value>Server0:2181,Server1:2181,Server2:2181,Server3:2181,Server4:2181</value>
+	</property>	
+```
+
+- 最终的hbase-site.xml配置文件：
+
+```xml
+	<configuration>
+		<property>
+			<name>hbase.cluster.distributed</name>					
+			<value>true</value>
+		</property>
+		<property>
+			<name>hbase.rootdir</name>					
+			<value>hdfs://Server0:9000/hbase</value>
+		</property>
+		<property>
+			<name>hbase.zookeeper.property.dataDir</name>					
+			<value>/home/hadoop/hbase-1.2.4/zk</value>
+		</property>
+		<property>
+			<name>hbase.zookeeper.quorum</name>
+			<value>Server1:2181,Server2:2181,Server3:2181,Server4:2181</value>
+		</property>
+	</configuration>
+```
+
+- hmaster没有启动的问题：
+
+	原因：由于JDK使用的是jdk1.8.0_65
+	
+	解决方法，修改配置文件hbase-env.sh：
+		# Configure PermSize. Only needed in JDK7. You can safely remove it for JDK8+
+		#export HBASE_MASTER_OPTS="$HBASE_MASTER_OPTS -XX:PermSize=128m -XX:MaxPermSize=128m -XX:ReservedCodeCacheSize=256m"
+		#export HBASE_REGIONSERVER_OPTS="$HBASE_REGIONSERVER_OPTS -XX:PermSize=128m -XX:MaxPermSize=128m -XX:ReservedCodeCacheSize=256m"
+		注释掉就好了
+	参照网址：https://blog.csdn.net/Elimeny/article/details/81318083
+	
+	
