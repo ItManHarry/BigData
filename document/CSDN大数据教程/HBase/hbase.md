@@ -144,7 +144,7 @@
 
 - NIO			//底层技术：ChannelSocket + ByteBuffer
 
-# hbase使用外部zookeeper
+## hbase使用外部zookeeper
 
 - 设置HBASE_HOME/conf/hbase-env.sh配置文件
 
@@ -172,11 +172,7 @@
 		<property>
 			<name>hbase.rootdir</name>					
 			<value>hdfs://Server0:9000/hbase</value>
-		</property>
-		<property>
-			<name>hbase.zookeeper.property.dataDir</name>					
-			<value>/home/hadoop/hbase-1.2.4/zk</value>
-		</property>
+		</property>		
 		<property>
 			<name>hbase.zookeeper.quorum</name>
 			<value>Server1:2181,Server2:2181,Server3:2181,Server4:2181</value>
@@ -195,4 +191,97 @@
 		注释掉就好了
 	参照网址：https://blog.csdn.net/Elimeny/article/details/81318083
 	
+## 	hbase命令
+
+- 启动shell
+
+```
+	$>hbase shell
+```
+
+- hbase命名空间
+
+	查看命令(类似show databases)：
 	
+```
+	hbase(main)> list_namespace
+```
+
+	显示结果：
+	
+	- default	//默认空间,创建表是默认的表空间
+	- hbase		//元数据存放命名空间,相当于数据库
+	
+- 命名空间下的表信息
+
+	查看命令：
+	
+```
+	hbase(main)> list_namespace_tables 'hbase' //命名空间名称
+```
+
+	显示结果：
+	
+	- meta			//元数据表
+	- namespace		//命名空间表
+	
+- 创建命名空间
+
+	创建命令：
+
+```
+	hbase(main)> create_namespace 'doosan' 
+```
+
+
+- 表命令
+
+	- 创建命令：
+	
+```
+	hbase(main)> create 'ns[不加默认建表在default命名空间下]:employee'， 'baseinfo', 'addinfo','workinfo'
+```	
+
+	- 查看表结构命令：
+	
+```
+	hbase(main)> desc 'ns:employee'
+```	
+
+	- 插入数据
+
+```
+	hbase(main)> put 'doosan:users','row1','sysinfo:code','20112004'
+```	
+
+	- 查询表数据命令(查询全部)：
+	
+```
+	hbase(main)> scan 'ns:employee'
+```
+
+	- 查询表数据命令(获取单行数据)：
+	
+```
+	hbase(main)> get 'ns:employee','row1'
+```
+
+- 查询表数据命令(获取列数据)：
+	
+```
+	hbase(main)> get 'ns:employee','row1'，column='baseinfo'					//单列
+	hbase(main)> get 'ns:employee','row1'，column=['baseinfo','addinfo',...]	//多列
+```
+
+	- 删除数据命令，必须先disable表：
+	
+```
+	hbase(main)> disable 'ns:employee'
+	hbase(main)> drop 'ns:employee'
+```	
+
+	- 删除表命令，必须先disable表：
+	
+```
+	hbase(main)> delete 'ns:employee','row1', 'sysinfo:code'
+```	
