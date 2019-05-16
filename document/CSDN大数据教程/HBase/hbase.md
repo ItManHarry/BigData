@@ -285,3 +285,55 @@
 ```
 	hbase(main)> delete 'ns:employee','row1', 'sysinfo:code'
 ```	
+
+## hbase client api
+
+- pom.xml引入包
+
+```xml
+	<dependency>
+	    <groupId>org.apache.hbase</groupId>
+	    <artifactId>hbase-client</artifactId>
+	    <version>1.2.4</version>
+	</dependency>
+```
+
+- 客户端代码
+
+```java
+	package com.doosan.bd;
+	import com.doosan.bd.hbase.Admin;
+	import com.doosan.bd.hbase.Configuration;
+	import com.doosan.bd.hbase.Connection;
+	import com.doosan.bd.hbase.NamespaceDescriptor;
+
+	/**
+	 * Hello world!
+	 *
+	 */
+	public class App 
+	{
+		public static void main( String[] args ) throws Exception{
+			//创建配置
+			Configuration conf = HBaseConfiguration.create();
+			//连接器
+			Connection connection = ConnectionFactory.createConnection(conf);
+			//得到管理程序
+			Admin admin = connection.getAdmin();
+			//获取命名空间描述
+			NamespaceDescriptor nd = NamespaceDescriptor.create("bd").build();
+			//执行创建命名空间
+			admin.createNamespace(nd);
+			System.out.println("Create 'bd' namespace successfully...");
+			//创建表
+			TableName name = TableName.valueOf("employee");
+			HTableDescriptor td = new HTableDescriptor(name);
+			//创建列族
+			HColumnDescriptor cd = new HColumnDescriptor("baseinfo");
+			td.addFamily(cd);
+			admin.createTable(td);
+			System.out.println("Create employee table  successfully...");
+		}
+	}
+```
+
