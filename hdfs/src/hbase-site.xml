@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<configuration>
+	<property>
+		<name>hbase.cluster.distributed</name>					
+		<value>true</value>
+	</property>
+	<property>
+		<name>hbase.rootdir</name>					
+		<value>hdfs://10.40.123.210:9000/hbase</value>
+	</property>
+	<property>
+		<name>hbase.zookeeper.quorum</name>
+		<value>10.40.123.211:2181,10.40.123.212:2181,10.40.123.213:2181,10.40.123.214:2181</value>
+	</property>
+</configuration>
