@@ -12,7 +12,7 @@
 
 ## hbase和hive的区别
 
-- hive是高延迟、实时性查的数据仓库
+- hive是高延迟、实时性差的数据仓库
 
 - hbase是低延迟、实时性高的数据库
 
@@ -448,3 +448,11 @@
 	}
 ```
 
+## Hbase架构
+
+- WAL 				//write ahead log  写前日志
+
+- HregionServer 	//区域服务器，管理RegionServer
+					//打开HRegion，创建Store（对应列族）实例
+					//每个Store对应多个storefile
+	
