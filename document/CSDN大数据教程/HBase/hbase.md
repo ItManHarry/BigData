@@ -455,4 +455,10 @@
 - HregionServer 	//区域服务器，管理RegionServer
 					//打开HRegion，创建Store（对应列族）实例
 					//每个Store对应多个storefile
+					//Storefile是HFile的轻量级封装
+					//HFile负责和底层HDFS交互
+					
+- 表级文件
+
+- Region级文件
 	
